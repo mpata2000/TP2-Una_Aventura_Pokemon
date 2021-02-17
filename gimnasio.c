@@ -1,44 +1,23 @@
 #include "gimnasio.h"
 
 
-typedef struct pokemon{
-    char nombre[MAX_NOMBRE];
-    int ataque;
-    int defensa;
-    int velocidad;
-    int evs;
-}pokemon_t;
 
-typedef struct entrenador{
-    char tipo;
-    char nombre[MAX_NOMBRE];
-    lista_t* pokemon;
-}entrenador_t;
-
-typedef struct gimnasio{
-    char nombre[MAX_NOMBRE];
-    int dificultad;
-    int id_funcion_batalla;
-    lista_t* entrenadores;
-}gimnasio_t;
-
-
-pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int ataque,int defensa,int velocidad){
+pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int velocidad,int ataque,int defensa){
     pokemon_t* poke = calloc(1,sizeof(pokemon_t));
     if(!poke){
         return NULL;
     }
 
     strcpy(poke->nombre,nombre);
+    poke->velocidad = velocidad;
     poke->ataque = ataque;
     poke->defensa = defensa;
-    poke->velocidad = velocidad;
 
     return poke;
 }
 
-void pokemon_destruir(pokemon_t* pokemon){
-    free(pokemon);
+void pokemon_destruir(void* pokemon){
+    free((pokemon_t*)pokemon);
 }
 
 
@@ -71,15 +50,15 @@ int entrenador_agregar_pokemon(entrenador_t* entrenador,pokemon_t* pokemon){
     return lista_insertar(entrenador->pokemon,pokemon);
 }
 
-void entrenador_destruir(entrenador_t* entrenador){
+void entrenador_destruir(void* entrenador){
     if(!entrenador){
         return;
     }
 
-    if(entrenador->pokemon){
-        lista_destruir(entrenador->pokemon);
+    if(((entrenador_t*)entrenador)->pokemon){
+        lista_destruir(((entrenador_t*)entrenador)->pokemon);
     }
-    free(entrenador);
+    free((entrenador_t*)entrenador);
 }
 
 
@@ -93,21 +72,33 @@ gimnasio_t* gimnasio_crear(char nombre[MAX_NOMBRE],int dificultad,int id_funcion
         return NULL;
     }
 
-    stpcpy(gym->nombre,nombre);
+    strcpy(gym->nombre,nombre);
     gym->dificultad = dificultad;
-    gym->id_funcion_batalla == id_funcion_batalla;
+    gym->id_funcion = id_funcion_batalla;
     gym->entrenadores = entrenadores_aux;
 
     return gym;
 }
 
-void gimnasio_destruir(gimnasio_t* gimnasio){
+int gimnasio_comparar_dificultades(void* gym_1,void* gym_2){
+    return ((gimnasio_t*)gym_1)->dificultad - ((gimnasio_t*)gym_2)->dificultad;
+}
+
+int gimnasio_insertar_entrenador(gimnasio_t* gimnasio,entrenador_t* entrenador){
+    if(!gimnasio || !entrenador){
+        return ERROR;
+    }
+
+    return lista_insertar(gimnasio->entrenadores,entrenador);
+}
+
+void gimnasio_destruir(void* gimnasio){
     if(!gimnasio){
         return;
     }
 
-    if(gimnasio->entrenadores){
-        lista_destruir(gimnasio->entrenadores);
+    if(((gimnasio_t*)gimnasio)->entrenadores){
+        lista_destruir(((gimnasio_t*)gimnasio)->entrenadores);
     }
-    free(gimnasio);
+    free((gimnasio_t*)gimnasio);
 }

@@ -1,5 +1,5 @@
-#ifndef _HEAP_H_
-#define _HEAP_H_
+#ifndef __HEAP_H__
+#define __HEAP_H__
 
 #include <stdlib.h>
 
@@ -8,9 +8,10 @@
 
 
 /*
- * Comparador de elementos. Recibe dos elementos y devuelve
- * 0 en caso de ser iguales, 1 si el primer elemento es mayor al
- * segundo o -1 si el primer elemento es menor al segundo.
+ * Comparador de elementos. Recibe dos elementos y devuelve:
+ *    - 0 en caso de ser iguales, 
+ *    - mayor a 0 si el primer elemento es mayor al segundo,
+ *    - menor a 0 si el primer elemento es menor al segundo.
  */
 typedef int (*heap_comparador)(void*, void*);
 
@@ -36,4 +37,4 @@ void* heap_extraer_raiz(heap_t* heap);
 void heap_destruir(heap_t* heap);
 
 
-#endif /* _HEAP_H_ */
+#endif /* __HEAP_H__ */

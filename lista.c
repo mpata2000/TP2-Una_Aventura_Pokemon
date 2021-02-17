@@ -1,8 +1,8 @@
 #include "lista.h"
 #include <stdlib.h>
 
-#define ERROR -1
 #define EXITO 0
+#define ERROR -1
 /*
  * Crea la lista reservando la memoria necesaria 
  * Devuelve un puntero a la lista creada o NULL en caso de error.
