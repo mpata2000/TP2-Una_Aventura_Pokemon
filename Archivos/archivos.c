@@ -13,7 +13,6 @@
 #define FORMATO_POKEMON "%c;%99[^;];%8i;%8i;%8i\n"     //P;nombre_pokemon1; velocidad; ataque; defensa
 #define ERROR_FORMATO_POKEMON "P;nombre_pokemon; velocidad; ataque; defensa" 
 #define CAMPOS_POKEMON 5
-#define MAX_FUNCIONES_BATALLA 5 
 
 
 
@@ -136,10 +135,10 @@ entrenador_t* leer_entrenador(FILE* archivo,char linea[BUFFER],int* num_linea,bo
 
 /*
  * Recive un numero y devuelve una id de funcion de batalla valida
- * Entre 1 y 5
+ * Entre 0 y 4
 */
 int id_funcion_valida(int id_funcion){
-    return 1 + abs(id_funcion)%MAX_FUNCIONES_BATALLA;
+    return abs(id_funcion)%MAX_FUNCIONES_BATALLA;
 }
 
 /*

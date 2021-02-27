@@ -16,6 +16,16 @@ pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int velocidad,int ataque,int de
     return poke;
 }
 
+pokemon_t* pokemon_recrear(pokemon_t* pokemon){
+    if(!pokemon){
+        return NULL;
+    }
+    pokemon_t* pkm = pokemon_crear(pokemon->nombre,pokemon->velocidad,pokemon->ataque,pokemon->defensa);
+    pkm->evs = pokemon->evs;
+    
+    return pkm;
+}
+
 void pokemon_aumentrar_evs(pokemon_t* pokemon){
     if(!pokemon){
         return;

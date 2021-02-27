@@ -8,7 +8,6 @@
 typedef struct personaje{
     char nombre[MAX_NOMBRE];
     pokemon_t* party[MAX_POKEMON_PARTY];
-    int iterador_party;
     lista_t* pokemon_obtenidos;
 }personaje_t;
 
@@ -18,9 +17,18 @@ typedef struct personaje{
 */
 personaje_t* personaje_crear(char nombre[MAX_NOMBRE]);
 
-
+/*
+ * Recive un personaje valido y dos numeros
+ *    -> num_pkm_party es la posicion del pokemon que se quiere sacar(Tiene que ser meno a 6)
+ *    -> num_pkm_obteni es la posicion del pokemon que se quiere poner en la party
+ * Cambia los Pokemon solo si el Pokemon no esta ya en la party
+ * Devuevle 0 en caso de que el cambio e exitoso o -1 en caso de ERROR
+*/
 int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t num_pkm_obtenido);
 
+/*
+ * Muestra un personaje valido y todo sus Pokemon
+*/
 void personaje_mostrar(personaje_t* personaje);
 
 /*

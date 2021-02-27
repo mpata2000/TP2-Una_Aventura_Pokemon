@@ -18,9 +18,17 @@ typedef struct pokemon{
 
 
 /*
- * Crea un pokemon con los stats recividos 
+ * Crea y reserva la memoria de un pokemon con los stats recividos 
+ * Devuelve un puntero al Pokemon creado o NULL en caso de error.
 */
 pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int velocidad,int ataque,int defensa);
+
+/*
+ * Recive un pokemon valido
+ * Copia al pokemon recivido y reserva la memoria de un pokemon igual
+ * Devuelve un puntero al Pokemon creado o NULL en caso de error.
+*/
+pokemon_t* pokemon_recrear(pokemon_t* pokemon);
 
 /*
  * Recive un Pokemon valido y si es posible aumenta su evs(Maximo de 63)

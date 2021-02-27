@@ -4,6 +4,7 @@
 #define EXITO 0
 #define ERROR -1
 
+
 /***************************/
 /*   FUNCIONES ENTRENDOR   */
 /***************************/
@@ -53,6 +54,13 @@ void entrenador_mostrar_pokemon(entrenador_t* entrenador){
 
 }
 
+pokemon_t* entrenador_pokemon(entrenador_t* entrenador,size_t pos){
+    if(!entrenador){
+        return 0;
+    }
+    return lista_elemento_en_posicion(entrenador->pokemon,pos);
+}
+
 
 void entrenador_destruir(void* entrenador){
     if(!entrenador){
@@ -69,30 +77,18 @@ void entrenador_destruir(void* entrenador){
 /*   FUNCIONES GIMNASIO    */
 /***************************/
 
+/*
+ * Recive un numero de id de funcion de batalla
+ * Devuelve la funcion segun la id
+ * En caso de que no exista la id se devuelve funcion_batalla_1
+*/
 funcion_batalla funcion_de_batalla_segun_id(int id){
-    funcion_batalla retorno;
-    switch (id){
-        case 1:
-            retorno = funcion_batalla_1;
-            break;
-        case 2:
-            retorno = funcion_batalla_2;
-            break;
-        case 3:
-            retorno = funcion_batalla_3;
-            break;
-        case 4:
-            retorno = funcion_batalla_4;
-            break;
-        case 5:
-            retorno = funcion_batalla_5;
-            break;
-        default:
-            retorno = funcion_batalla_1;
-            break;
+    if(id >= MAX_FUNCIONES_BATALLA || id < 0){
+        return funcion_batalla_1;
     }
+    funcion_batalla funcion[MAX_FUNCIONES_BATALLA] = {funcion_batalla_1,funcion_batalla_2,funcion_batalla_3,funcion_batalla_4,funcion_batalla_5};
 
-    return retorno;
+    return funcion[id];
 }
 
 gimnasio_t* gimnasio_crear(char nombre[MAX_NOMBRE],int dificultad,int id_funcion_batalla){
@@ -131,6 +127,14 @@ entrenador_t* gimnasio_entrenador_a_pelear(gimnasio_t* gimnasio){
         return NULL;
     }
     return lista_ultimo(gimnasio->entrenadores);
+}
+
+char gimnasio_tipo_entrenador(gimnasio_t* gimnasio){
+    entrenador_t* entrenador = gimnasio_entrenador_a_pelear(!gimnasio);
+    if(!entrenador){
+        return '/0';
+    }
+    return entrenador->tipo;
 }
 
 size_t gimnasio_entrenadores_restantes(gimnasio_t* gimnasio){

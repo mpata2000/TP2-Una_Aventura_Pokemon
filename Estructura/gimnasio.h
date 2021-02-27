@@ -13,6 +13,7 @@
 #define LIDER 'L'
 #define ENTRENADOR 'E'
 #define POKEMON 'P'
+#define MAX_FUNCIONES_BATALLA 5 
 
 
 
@@ -42,6 +43,8 @@ int entrenador_agregar_pokemon(entrenador_t* entrenador,pokemon_t* pokemon);
 
 size_t entrenador_cantidad_pokemon(entrenador_t* entrenador);
 
+pokemon_t* entrenador_pokemon(entrenador_t* entrenador,size_t pos);
+
 void entrenador_destruir(void* entrenador);
 
 
@@ -63,6 +66,8 @@ int gimnasio_comparar_dificultades(void* gym_1,void* gym_2);
 int gimnasio_insertar_entrenador(gimnasio_t* gimnasio,entrenador_t* entrenador);
 
 entrenador_t* gimnasio_entrenador_a_pelear(gimnasio_t* gimnasio);
+
+char gimnasio_tipo_entrenador(gimnasio_t* gimnasio);
 
 size_t gimnasio_entrenadores_restantes(gimnasio_t* gimnasio);
 

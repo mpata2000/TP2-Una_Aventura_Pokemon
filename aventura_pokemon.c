@@ -15,7 +15,6 @@
 #define REINTENTAR 'R'
 #define FIN_PARTIDA 'F'
 #define TOMAR_POKEMON 'T'
-#define MAX_LECTURA_MENU 2
 
 typedef struct juego{
     heap_t* gimnasios;
@@ -26,7 +25,7 @@ typedef struct juego{
 
 
 
-juego_t* iniciar_juego(){
+juego_t* crear_juego(){
     juego_t* juego = calloc(1,sizeof(juego_t));
 
     juego->gimnasios = heap_crear(gimnasio_comparar_dificultades,gimnasio_destruir);
@@ -35,16 +34,6 @@ juego_t* iniciar_juego(){
     return juego;
 }
 
-char leer_caracter(){
-    char buffer[MAX_LECTURA_MENU] = "";
-
-    printf("Ingrese una letra: ");
-    if(leer_linea(stdin,buffer,MAX_LECTURA_MENU,NULL) == NULL){
-        buffer[0] = '\0';
-    }
-
-    return buffer[0];
-}
 
 void destruir_juego(juego_t* juego){
     if (!juego){
@@ -52,7 +41,9 @@ void destruir_juego(juego_t* juego){
     }
 
     heap_destruir(juego->gimnasios);
-    gimnasio_destruir(juego->gimnasio_actual);
+    if(!juego->gimnasio_actual){
+        gimnasio_destruir(juego->gimnasio_actual);
+    }
     personaje_destruir(juego->personaje);
     free(juego);
 }
@@ -63,7 +54,7 @@ void destruir_juego(juego_t* juego){
  * Devuelve 0 si todo ocurrio con EXITO de lo contrario devuelve -1
 */
 int agregar_gimnasio(juego_t* juego){
-    char ruta_archivo[MAX_RUTA_ARCHIVO] = "./Gimnasios/";
+    char ruta_archivo[MAX_RUTA_ARCHIVO] = "./Archivos/Gimnasios/";
     char nombre_archivo[MAX_NOMBRE];
 
     system("clear");
@@ -77,9 +68,17 @@ int agregar_gimnasio(juego_t* juego){
 
     strcat(ruta_archivo,nombre_archivo);
     if(lectura_archivo_gimnasios(ruta_archivo,juego->gimnasios) == ERROR){
-        printf("\nSe leyeron correctamente %i gimnasios\n",heap_elementos(juego->gimnasio_actual));
-        printf("Si desea continuar presione N\n");
+        if(heap_elementos(juego->gimnasio_actual)){
+            printf("Ocurrio un error");
+            printf("Se leyeron correctamente %i gimnasios\n",heap_elementos(juego->gimnasio_actual));
+            if(leer_caracter("Si desea continuar presione N\n") == NEXT){
+                return EXITO;
+            };
+        }
+        // TODO
     }
+
+    return EXITO;
 }
 
 /*
@@ -88,7 +87,7 @@ int agregar_gimnasio(juego_t* juego){
  * Devuelve 0 si todo ocurrio con EXITO de lo contrario devuelve -1
 */
 int agregar_personaje(juego_t* juego){    
-    char ruta_archivo[MAX_RUTA_ARCHIVO] = "./Personajes/";
+    char ruta_archivo[MAX_RUTA_ARCHIVO] = "./Archivos/Personajes/";
     char nombre_archivo[MAX_NOMBRE];
 
     system("clear");
@@ -103,6 +102,8 @@ int agregar_personaje(juego_t* juego){
     strcat(ruta_archivo,nombre_archivo);
     juego->personaje = lectura_archivo_personaje(ruta_archivo);
     if(!juego->personaje){
+        printf("Ocurrio un error en la carga del archivo");
+        enter_para_continuar();
         return ERROR;
     }
     return EXITO;
@@ -116,6 +117,7 @@ bool juego_valido(juego_t* juego){
     return (juego->gimnasios && juego->personaje);
 }
 
+
 int menu_inicio(juego_t* juego){
     if(!juego){
         return ERROR;
@@ -127,7 +129,7 @@ int menu_inicio(juego_t* juego){
         system("clear");
         mostrar_menu_inicio();
 
-        ingreso = leer_caracter();
+        ingreso = leer_caracter("Ingrese una letra: ");
         // Si ocurre un error cingreso va a ser '/0' no deberia ser un problema
 
         if((ingreso == COMENZAR_PARTIDA || ingreso == SIMULAR_PARTIDA) && !juego_valido(juego)){
@@ -161,25 +163,51 @@ int menu_inicio(juego_t* juego){
 }
 
 /*
- * Imprime el mensaje recivido por pantalla
- * Lee el numero ingresado por el usuario y lo devuelve positivo
- * Si ocurre un error devuelve -1
+ * Recive un juego valido
+ * 
 */
-int obtener_pos_pokemon(const char* mensaje){
-    char ingreso[6];
-    int pos;
+bool batalla(juego_t* juego){
+    if(!juego){
+        return false;
+    }
+    entrenador_t* entrenador_actual = gimnasio_entrenador_a_pelear(juego->gimnasio_actual);
+    if(!entrenador_actual){
+        return false;
+    }
+    size_t contador_personaje = 0;
+    size_t contador_entrenador = 0;
+    pokemon_t* pkm_jugador = NULL;
+    pokemon_t* pkm_entrenador = NULL;
 
-    printf("%s");
-    if(leer_linea(stdin,ingreso,6,NULL) == NULL){
-        return ERROR;
+    do{
+        pkm_jugador = personaje_pokemon_party(juego->personaje,contador_personaje);
+        pkm_entrenador = entrenador_pokemon(entrenador_actual,contador_entrenador);
+        if(!juego->simular){
+            menu_batalla(juego,pkm_jugador,pkm_entrenador);
+        }
+        /*Talvez abstraer funcion?*/
+        if(juego->gimnasio_actual->funcion_batalla(pkm_jugador,pkm_entrenador) == GANO_PRIMERO){ // El que pierde tiene que pasar de Pokemon
+            /* TODO: Mostrar quien gano?*/
+            contador_entrenador++;
+        }else{
+            contador_personaje++;
+        }
+
+        if (!juego->simular){
+            n_para_continuar();
+        }
+        
+    }while (!pkm_jugador && !pkm_entrenador); // El primero que se quede sin pokemon pierde
+    
+    if(pkm_jugador){
+        return true;
+    }else{
+        return false;
     }
 
-    pos = atoi(ingreso);
-    if(pos == 0){
-        return ERROR;
-    }
-    return abs(pos);
 }
+
+
 
 void cambiar_pokemon(juego_t* juego){
     if(!juego){
@@ -195,7 +223,7 @@ void cambiar_pokemon(juego_t* juego){
             printf("Recuerde de solo ingresar numeros y que el numero pertenesca a la party\n");
         }
         
-        pos_pkm_1 = obtener_pos_pokemon("Ingresar la posicion del Pokemon de la Party: ");
+        pos_pkm_1 = obtener_numero("Ingresar la posicion del Pokemon de la Party: ");
     }while(pos_pkm_1 >= MAX_POKEMON_PARTY || pos_pkm_1 == ERROR);
 
     do{
@@ -204,7 +232,7 @@ void cambiar_pokemon(juego_t* juego){
             printf("Recuerde de solo ingresar numeros\n");
         }
         
-        pos_pkm_2 = obtener_pos_pokemon("Ingresar la posicion del Pokemon Obtenido: ");
+        pos_pkm_2 = obtener_numero("Ingresar la posicion del Pokemon Obtenido: ");
     }while(pos_pkm_2 == ERROR);
 
     if(personaje_cambiar_pokemon(juego->personaje,pos_pkm_1,pos_pkm_2) == EXITO){
@@ -216,21 +244,22 @@ void cambiar_pokemon(juego_t* juego){
     enter_para_continuar();
 }
 
-void menu_gimnasio(juego_t* juego){
-    if(!juego){
-        return;
-    }
-
+/*
+ * 
+*/
+bool menu_gimnasio(juego_t* juego){
     char ingreso = '\0';
-    bool derrotado = false;
-    juego->gimnasio_actual = heap_extraer_raiz(juego->gimnasios);
-    if(!juego->gimnasio_actual){
-        return;
+    bool gimnasio_derrotado = false;
+    bool jugador_derrotado = false;
+
+    if(!juego || !juego->gimnasio_actual){
+        return true;
     }
 
-    while(gimnasio_entrenadores_restantes(juego->gimnasio_actual) > 0 && !derrotado){
-        menu_gimnasio(juego);
-        ingreso = leer_caracter();
+
+    while(gimnasio_entrenadores_restantes(juego->gimnasio_actual) > 0 && !jugador_derrotado && !gimnasio_derrotado){
+        mostrar_menu_gimnasio(juego);
+        ingreso = leer_caracter("Ingrese una letra: ");
         
         switch (ingreso){
             case CAMBIAR_POKEMON:
@@ -244,6 +273,15 @@ void menu_gimnasio(juego_t* juego){
                 enter_para_continuar();
                 break;
             case PROXIMA_BATALLA:
+                if(batalla(juego)){
+                    if(gimnasio_tipo_entrenador(juego->gimnasio_actual) == LIDER){
+                        gimnasio_derrotado = true;
+                    }else{
+                        gimnasio_sacar_ultimo_entrenador(juego->gimnasio_actual);
+                    }
+                }else{
+                    jugador_derrotado = true;
+                }
                 break;
             default:
                 // Mensaje de caracter no esperado?
@@ -251,33 +289,99 @@ void menu_gimnasio(juego_t* juego){
         }
     }
 
-    if(derrotado){
-        menu_derrota();
-    }else{
-
-    }
+    return jugador_derrotado;
 }
 
-void menu_batalla(){
-    
-}
+
 
 void menu_victoria(juego_t* juego){
     if(!juego){
         return ERROR;
     }
     
+    char ingreso = '\0';
+
+    do{
+        mostrar_menu_victoria(juego);
+        ingreso = leer_caracter("Ingrese una letra: ");
+        
+        switch (ingreso){
+            case CAMBIAR_POKEMON:
+                cambiar_pokemon(juego);
+                break;
+            case TOMAR_POKEMON:
+                //Mostrar Info del Gimnasio
+                break; 
+            case NEXT:
+                gimnasio_destruir(juego->gimnasio_actual);
+                juego->gimnasio_actual = heap_extraer_raiz(juego->gimnasios);
+                break;
+            default:
+                // Mensaje de caracter no esperado?
+                break;
+        }
+    } while (ingreso != NEXT);
+    
+    
 
 }
 
-void menu_derrota(){
+/*
+ * Recive un juego valido
+ * Devuelve:
+ *     - True si el jugador quiere terminar la partida
+ *     - False si quiere reintentar el gimnasio
+*/
+bool menu_derrota(juego_t* juego){
+   if(!juego){
+        return false;
+    }
+    bool retorno = true;
+    char ingreso = '\0';
+
+    do{
+        mostrar_menu_derrota(juego);
+        ingreso = leer_caracter("Ingrese una letra: ");
+        
+        switch (ingreso){
+            case CAMBIAR_POKEMON:
+                cambiar_pokemon(juego);
+                break;
+            case FIN_PARTIDA:
+                gimnasio_destruir(juego->gimnasio_actual);
+                //Terminar Juego
+                break; 
+            case REINTENTAR:
+                retorno = false
+                break;
+            default:
+                // Mensaje de caracter no esperado?
+                break;
+        }
+    } while (ingreso != REINTENTAR && ingreso != FIN_PARTIDA); 
     
+    return retorno;
 }
 
 
 int main(void){
+    bool derrota = false;
+    juego_t* juego = crear_juego();
 
-    juego_t juego;
 
+    if(menu_inicio(juego) == EXITO){
+        juego->gimnasio_actual = heap_extraer_raiz(juego->gimnasios);
+        do{
+            derrota = menu_gimnasio(juego);
+
+            if(derrota){
+                derrota = menu_derrota(juego);
+            }else{
+                menu_victoria(juego);
+            }
+        }while(juego->gimnasio_actual && !derrota);
+    }
+
+    destruir_juego(juego);
 
 }
