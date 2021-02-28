@@ -5,6 +5,9 @@
 
 #define BUFFER 1024
 
+/*
+ * Para la ejecucion del programa por el tiempo recibido
+*/
 void detener_tiempo(float seg);
 
 /*
@@ -14,7 +17,7 @@ void detener_tiempo(float seg);
 void enter_para_continuar();
 
 /*
- * Recive un archivo valido, un string, el tamaño del string y el numero de linea por referencia si es necesario
+ * Recibe un archivo valido, un string, el tamaño del string y el numero de linea por referencia si es necesario
  * Se carga la linea leida al string
  * Si hay un error o se llega al final de archivo devuelve NULL
 */

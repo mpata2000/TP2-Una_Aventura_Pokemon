@@ -30,12 +30,13 @@ bool pokemon_esta_en_party(pokemon_t* party[MAX_POKEMON_PARTY],pokemon_t* pokemo
         if(party[i] == pokemon){
             esta = true;
         }
+        i++;
     }
     return esta;
 }
 
 int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t num_pkm_obtenido){
-    if(!personaje || num_pkm_party >= MAX_POKEMON_PARTY){
+    if(!personaje || num_pkm_party >= MAX_POKEMON_PARTY || personaje_cantidad_pokemon(personaje) < MAX_POKEMON_PARTY){
         return ERROR;
     }
 
@@ -61,7 +62,7 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
             
     printf("# Nombre:   ");
     for(int i = 0;i<MAX_POKEMON_PARTY;i++){
-        if(!party[i]){
+        if(party[i]){
             printf("# %13s ",party[i]->nombre);
         }else{
             printf("#               ");
@@ -71,7 +72,7 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
 
     printf("# Ataque    ");
     for(int i = 0;i<MAX_POKEMON_PARTY;i++){
-        if(!party[i]){
+        if(party[i]){
             printf("# %13i ",party[i]->ataque);
         }else{
             printf("#               ");
@@ -81,7 +82,7 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
 
     printf("# Defensa   ");
     for(int i = 0;i<MAX_POKEMON_PARTY;i++){
-        if(!party[i]){
+        if(party[i]){
             printf("# %13i ",party[i]->defensa);
         }else{
             printf("#               ");
@@ -91,7 +92,7 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
 
     printf("# Velocidad ");
     for(int i = 0;i<MAX_POKEMON_PARTY;i++){
-        if(!party[i]){
+        if(party[i]){
             printf("# %13i ",party[i]->velocidad);
         }else{
             printf("#               ");
@@ -101,7 +102,7 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
 
     printf("# EVs       ");
     for(int i = 0;i<MAX_POKEMON_PARTY;i++){
-        if(!party[i]){
+        if(party[i]){
             printf("# %13i ",party[i]->evs);
         }else{
             printf("#               ");
@@ -121,6 +122,12 @@ void personaje_mostrar(personaje_t* personaje){
     system("clear");
 
     //mostrar_nombre
+    printf("####################################\n");
+    printf("#                                  #\n");
+    printf("#       %-20s       #\n",personaje->nombre);
+    printf("#                                  #\n");
+    printf("####################################\n");
+    printf("\n");
 
     mostrar_party(personaje->party);
     printf("\n");
@@ -151,7 +158,7 @@ int personaje_agregar_pokemon(personaje_t* personaje,pokemon_t* pokemon){
         return ERROR;
     }
     if(personaje_cantidad_pokemon(personaje) < MAX_POKEMON_PARTY){
-        personaje->party[personaje_cantidad_pokemon(personaje)-1] = pokemon;
+        personaje->party[personaje_cantidad_pokemon(personaje)] = pokemon;
     }
     return lista_insertar(personaje->pokemon_obtenidos,pokemon);
 }

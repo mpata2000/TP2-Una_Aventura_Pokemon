@@ -20,8 +20,9 @@
  * Recive la linea leida, el numero de esa linea y el formato que se esperaba
 */
 void mensaje_error_formato(char linea[BUFFER],int num_linea,char formato_esperado[BUFFER]){
-    printf("En la linea %i se leyo:\n %s\n",num_linea,linea);
-    printf("Se esperaba algo del formato: %s\n",formato_esperado);
+    printf(" ERROR: \n");
+    printf(" En la linea %i se leyo:\n %s\n",num_linea,linea);
+    printf(" Se esperaba algo del formato: %s\n",formato_esperado);
 }
 
 
@@ -181,7 +182,7 @@ gimnasio_t* leer_gimnasio(FILE* archivo,char linea[BUFFER],int* num_linea,bool* 
         return NULL;
     }
     
-    while (!estado_archivo && linea[0] == ENTRENADOR && !(*error_lectura)){
+    while (estado_archivo && linea[0] == ENTRENADOR && !(*error_lectura)){
         entrenador_t* entrenador = leer_entrenador(archivo,linea,num_linea,error_lectura);
         if(gimnasio_insertar_entrenador(gym,entrenador) == ERROR){
             gimnasio_destruir(gym);

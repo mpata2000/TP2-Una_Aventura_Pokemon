@@ -11,7 +11,7 @@
 
 
 /*
- * Recive un archivo de gimnasios y un heap valido que lo pueda destruir
+ * Recibe un archivo de gimnasios y un heap valido que lo pueda destruir
  * Leera todos los gimnasios validos y lo insertara en el heap
  * Si se leyo todo el archivo correctamente devuelve 0(EXITO)
  * de lo contrario devuelve -1(ERROR)
@@ -19,7 +19,7 @@
 int lectura_archivo_gimnasios(const char* ruta_archivo,heap_t* heap);
 
 /*
- * Recive un archivo de personaje valido.
+ * Recibe un archivo de personaje valido.
  * Llena un personaje_t con los contenidos del archivo
  * Si ocurre algun error devuelve NULL.
 */

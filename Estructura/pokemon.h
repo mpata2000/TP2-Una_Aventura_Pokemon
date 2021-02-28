@@ -24,42 +24,42 @@ typedef struct pokemon{
 pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int velocidad,int ataque,int defensa);
 
 /*
- * Recive un pokemon valido
+ * Recibe un pokemon valido
  * Copia al pokemon recivido y reserva la memoria de un pokemon igual
  * Devuelve un puntero al Pokemon creado o NULL en caso de error.
 */
 pokemon_t* pokemon_recrear(pokemon_t* pokemon);
 
 /*
- * Recive un Pokemon valido y si es posible aumenta su evs(Maximo de 63)
+ * Recibe un Pokemon valido y si es posible aumenta su evs(Maximo de 63)
 */
 void pokemon_aumentrar_evs(pokemon_t* pokemon);
 
 /*
- * Recive un Pokemon y devuelve su nombre
+ * Recibe un Pokemon y devuelve su nombre
 */
 char* pokemon_nombre(pokemon_t* pokemon);
 
 /*
- * Recive un Pokemon y devuelve su ataque
+ * Recibe un Pokemon y devuelve su ataque
  * En caso de no recivir un Pokemon valido devuelve 0
 */
 int pokemon_ataque(pokemon_t* pokemon);
 
 /*
- * Recive un Pokemon y devuelve su defensa
+ * Recibe un Pokemon y devuelve su defensa
  * En caso de no recivir un Pokemon valido devuelve 0
 */
 int pokemon_defensa(pokemon_t* pokemon);
 
 /*
- * Recive un Pokemon y devuelve su velocidad
+ * Recibe un Pokemon y devuelve su velocidad
  * En caso de no recivir un Pokemon valido devuelve 0
 */
 int pokemon_velocidad(pokemon_t* pokemon);
 
 /*
- * Recive una lista de Pokemon y las imprime por pantalla
+ * Recibe una lista de Pokemon y las imprime por pantalla
 */
 void pokemon_mostrar(lista_t* pokemon);
 

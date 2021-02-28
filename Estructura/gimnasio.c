@@ -1,5 +1,6 @@
-#include "gimnasio.h"
 
+#include "gimnasio.h"
+#include <stdio.h>
 
 #define EXITO 0
 #define ERROR -1
@@ -48,7 +49,13 @@ void entrenador_mostrar_pokemon(entrenador_t* entrenador){
     if(!entrenador){
         return;
     }
-    //Nombre maybe
+    
+    printf("####################################\n");
+    printf("#                                  #\n");
+    printf("#       %22s       #\n",entrenador->nombre);
+    printf("#                                  #\n");
+    printf("####################################\n");
+    printf("\n");
 
     pokemon_mostrar(entrenador->pokemon);
 
@@ -78,7 +85,7 @@ void entrenador_destruir(void* entrenador){
 /***************************/
 
 /*
- * Recive un numero de id de funcion de batalla
+ * Recibe un numero de id de funcion de batalla
  * Devuelve la funcion segun la id
  * En caso de que no exista la id se devuelve funcion_batalla_1
 */
@@ -105,12 +112,23 @@ gimnasio_t* gimnasio_crear(char nombre[MAX_NOMBRE],int dificultad,int id_funcion
     gym->dificultad = dificultad;
     gym->funcion_batalla = funcion_de_batalla_segun_id(id_funcion_batalla);
     gym->entrenadores = entrenadores_aux;
+    gym->pokemon_tomado = false;
 
     return gym;
 }
 
 int gimnasio_comparar_dificultades(void* gym_1,void* gym_2){
     return ((gimnasio_t*)gym_1)->dificultad - ((gimnasio_t*)gym_2)->dificultad;
+}
+
+
+void gimnasio_mostrar(gimnasio_t* gimnasio){
+    if(!gimnasio){
+        return;
+    }
+    system("clear");
+    printf("%s\n",gimnasio->nombre);
+    
 }
 
 
@@ -122,6 +140,22 @@ int gimnasio_insertar_entrenador(gimnasio_t* gimnasio,entrenador_t* entrenador){
     return lista_insertar(gimnasio->entrenadores,entrenador);
 }
 
+bool gimnasio_pokemon_tomado(gimnasio_t* gimnasio){
+    if(!gimnasio ){
+        return true;
+    }
+    
+    return gimnasio->pokemon_tomado;
+}
+
+int gimnasio_tomar_pokemon(gimnasio_t* gimnasio){
+    if(!gimnasio || gimnasio->pokemon_tomado){
+        return ERROR;
+    }
+    gimnasio->pokemon_tomado = true;
+    return EXITO;
+}
+
 entrenador_t* gimnasio_entrenador_a_pelear(gimnasio_t* gimnasio){
     if(!gimnasio){
         return NULL;
@@ -130,16 +164,16 @@ entrenador_t* gimnasio_entrenador_a_pelear(gimnasio_t* gimnasio){
 }
 
 char gimnasio_tipo_entrenador(gimnasio_t* gimnasio){
-    entrenador_t* entrenador = gimnasio_entrenador_a_pelear(!gimnasio);
+    entrenador_t* entrenador = gimnasio_entrenador_a_pelear(gimnasio);
     if(!entrenador){
-        return '/0';
+        return '\0';
     }
     return entrenador->tipo;
 }
 
 size_t gimnasio_entrenadores_restantes(gimnasio_t* gimnasio){
     if(!gimnasio){
-        return NULL;
+        return 0;
     }
     return lista_elementos(gimnasio->entrenadores);
 }

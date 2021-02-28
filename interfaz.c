@@ -1,14 +1,7 @@
 #include "interfaz.h"
-#include "gimnasio.h"
-#include "personaje.h"
-#include "heap.h"
-
-typedef struct juego{
-    heap_t* gimnasios;
-    gimnasio_t* gimnasio_actual;
-    personaje_t* personaje;
-    bool simular;
-}juego_t;
+#include "./Estructura/gimnasio.h"
+#include "./Estructura/personaje.h"
+#include "./TDAs/heap.h"
 
 
 void menu_inicio_header(){
@@ -106,9 +99,10 @@ void info_cargar_gimnasio(){
  *      - Si se sufre una derrota frente a cualquier entrenador se deberá mostrar el Menú de derrot
 */
 void mostrar_menu_gimnasio(juego_t* juego){
+    system("clear");
     printf("###############################################################################################\n");
     printf("#                                                                                             #\n");
-    printf("#                            %37s                            #\n",juego->gimnasio_actual->nombre);
+    printf("#                                        MENU GIMNASIO                                        #\n");
     printf("#                                                                                             #\n");
     printf("###############################################################################################\n");
     printf("#                                                                                             #\n");
@@ -124,8 +118,8 @@ void mostrar_menu_gimnasio(juego_t* juego){
     printf("#                                                                                             #\n");
     printf("#   Ingrese:                                                                                  #\n");
     printf("#                                                                                             #\n");
-    printf("#   - 'T' Tomar Pokemon del Lider                         - 'C' Cambiar Pokemon               #\n");
-    printf("#   - 'N' Pelear el Proximo Gimnasio                                                          #\n");
+    printf("#   - 'E' Mostrar Entrenador Principal                    - 'G' Mostrar Gimnasio actual       #\n");
+    printf("#   - 'C' Cambiar Pokemon                                 - 'B' Proxima batalla               #\n");
     printf("#                                                                                             #\n");
     printf("###############################################################################################\n");
     printf("#                                                                                             #\n");
@@ -138,8 +132,8 @@ void mostrar_menu_gimnasio(juego_t* juego){
  * 
  * N: Próximo combate.
 */
-void mostrar_menu_batalla(){
-
+void mostrar_batalla(juego_t* juego,pokemon_t* pkm_jugador,pokemon_t* pkm_entrenador){
+    system("clear");
 }
 
 
@@ -148,7 +142,8 @@ void mostrar_menu_batalla(){
  * R: Reintenta el gimnasio.
  * F: Finaliza la partida.
 */
-void mostrar_menu_derrota(){
+void mostrar_menu_derrota(juego_t* juego){
+    system("clear");
     printf("###############################################################################################\n");
     printf("#                                                                                             #\n");
     printf("#                                         MENU DERROTA                                        #\n");
@@ -188,7 +183,8 @@ void mostrar_menu_derrota(){
  * N: Próximo gimnasio.
  *       - Si no hay próximo gimnasio, se deberá notificar al usuario que se convirtió en Maestro Pokémon.
 */
-void mostrar_menu_victoria(){
+void mostrar_menu_victoria(juego_t* juego){
+    system("clear");
     printf("###############################################################################################\n");
     printf("#                                                                                             #\n");
     printf("#                                         MENU VICTORIA                                       #\n");
@@ -217,6 +213,6 @@ void mostrar_menu_victoria(){
     printf("#                                                                                             #\n");
 }
 
-void pantalla_maestro_pokemon(){
-
+void pantalla_maestro_pokemon(juego_t* juego){
+    system("clear");
 }

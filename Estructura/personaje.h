@@ -18,7 +18,7 @@ typedef struct personaje{
 personaje_t* personaje_crear(char nombre[MAX_NOMBRE]);
 
 /*
- * Recive un personaje valido y dos numeros
+ * Recibe un personaje valido y dos numeros
  *    -> num_pkm_party es la posicion del pokemon que se quiere sacar(Tiene que ser meno a 6)
  *    -> num_pkm_obteni es la posicion del pokemon que se quiere poner en la party
  * Cambia los Pokemon solo si el Pokemon no esta ya en la party
@@ -32,20 +32,20 @@ int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t
 void personaje_mostrar(personaje_t* personaje);
 
 /*
- * Recive un personaje y un pokemon validos
+ * Recibe un personaje y un pokemon validos
  * Agrega el pokemon al personaje
  * Si tuvo exito devuelve 0 de lo contrario devuelve -1
 */
 int personaje_agregar_pokemon(personaje_t* personaje,pokemon_t* pokemon);
 
 /*
- * Recive un personaje_t valido
+ * Recibe un personaje_t valido
  * Devuelve la cantidad de pokemones que tiene.
 */
 size_t personaje_cantidad_pokemon(personaje_t* personaje);
 
 /*
- * Recive un personaje valido y la posicion del pokemon en la party
+ * Recibe un personaje valido y la posicion del pokemon en la party
  * Devuelve el Pokemon en esa posicion de la party o en caso de error NULL
 */
 pokemon_t* personaje_pokemon_party(personaje_t* personaje,size_t pos);

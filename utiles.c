@@ -1,5 +1,6 @@
 #include "utiles.h"
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 
@@ -22,7 +23,7 @@ void enter_para_continuar(){
 }
 
 /*
- * Recive un archivo valido, un string de tamaño BUFFER(1024) y el numero de linea por referencia
+ * Recibe un archivo valido, un string de tamaño BUFFER(1024) y el numero de linea por referencia
  * Se carga la linea leida al string
  * Si hay un error o se llega al final de archivo devuelve NULL
 */
@@ -37,21 +38,28 @@ char* leer_linea(FILE* archivo,char* memoria,size_t tam_memoria,int* num_linea){
 
     size_t pos = strlen(memoria);
 
-    if(pos == 0 || memoria[pos-1] != '\n'){
-        char descartar[BUFFER];
-        leer_linea(archivo,descartar,BUFFER,NULL);
+    if(pos > 1){
+        if(pos == 0 || memoria[pos-1] != '\n'){
+            char descartar[BUFFER];
+            leer_linea(archivo,descartar,BUFFER,NULL);
+        }
+
+        memoria[pos-1] = 0;
     }
-    memoria[pos-1] = 0;
-    (*num_linea)++;
+    
+    if(num_linea){
+        (*num_linea)++;
+    }
+    
     return memoria;
 }
 
 
 char leer_caracter(const char* mensaje){
-    char buffer[2] = "";
+    char buffer[3];  //En 0 se guarda el char, 1 '\n' en [2] '\0'
 
     printf("%s",mensaje);
-    if(leer_linea(stdin,buffer,2,NULL) == NULL){
+    if(leer_linea(stdin,buffer,3,NULL) == NULL){
         buffer[0] = '\0';
     }
 
@@ -67,7 +75,7 @@ int obtener_numero(const char* mensaje){
     char ingreso[6];
     int pos;
 
-    printf("%s");
+    printf("%s",mensaje);
     if(leer_linea(stdin,ingreso,6,NULL) == NULL){
         return ERROR;
     }
