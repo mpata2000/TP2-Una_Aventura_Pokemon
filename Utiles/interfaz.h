@@ -2,7 +2,7 @@
 #define __INTERFAZ_H__
 
 #include <stdio.h>
-#include "aventura_pokemon.h"
+#include "../Estructura/aventura_pokemon.h"
 
 
 void mostrar_menu_inicio(juego_t* juego);
