@@ -270,15 +270,16 @@ personaje_t* lectura_archivo_personaje(const char* ruta_archivo){
     while (leer_linea(archivo,linea,BUFFER,&num_linea) && linea[0] == POKEMON && !error_lectura){
         pokemon_t* pokemon = leer_pokemon(linea,&num_linea,&error_lectura);
         if(pokemon){
-            if(personaje_cantidad_pokemon(personaje) < MAX_POKEMON_PARTY){
-                personaje->party[i]=pokemon;
-            }
             if(personaje_agregar_pokemon(personaje,pokemon) == ERROR){
                 personaje_destruir(personaje);
                 return NULL;
             }
         }
         i++;
+    }
+
+    if(personaje_cantidad_pokemon(personaje) == 0){
+        return NULL;
     }
 
     return personaje;

@@ -32,8 +32,9 @@ int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t
 void personaje_mostrar(personaje_t* personaje);
 
 /*
- * Recibe un personaje y un pokemon validos
+ * Recibe un personaje y un Pokemon validos
  * Agrega el pokemon al personaje
+ * Si el jugador tiene menos de 6 jugadores el Pokemon tambien se agrega a la party
  * Si tuvo exito devuelve 0 de lo contrario devuelve -1
 */
 int personaje_agregar_pokemon(personaje_t* personaje,pokemon_t* pokemon);

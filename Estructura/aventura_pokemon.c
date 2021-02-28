@@ -1,5 +1,5 @@
 #include "aventura_pokemon.h"
-#include "interfaz.h"
+#include "../Utiles/interfaz.h"
 
 #define NEXT 'N'
 
@@ -133,9 +133,10 @@ bool batalla(juego_t* juego){
             mostrar_batalla(juego,pkm_jugador,pkm_entrenador);
         }
         /*Talvez abstraer funcion?*/
-        if(juego->gimnasio_actual->funcion_batalla(pkm_jugador,pkm_entrenador) == GANO_PRIMERO){ // El que pierde tiene que pasar de Pokemon
+        if(gimnasio_batalla(juego->gimnasio_actual,pkm_jugador,pkm_entrenador) == GANO_PRIMERO){ // El que pierde tiene que pasar de Pokemon
             /* TODO: Mostrar quien gano?*/
             contador_entrenador++;
+            pokemon_aumentrar_evs(pkm_jugador);
         }else{
             contador_personaje++;
         }
@@ -190,6 +191,7 @@ void tomar_pokemon(juego_t* juego){
         gimnasio_tomar_pokemon(juego->gimnasio_actual);
     }    
 }
+
 
 /*
  * Recibe un juego valido

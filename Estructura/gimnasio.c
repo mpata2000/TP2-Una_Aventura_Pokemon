@@ -140,6 +140,7 @@ int gimnasio_insertar_entrenador(gimnasio_t* gimnasio,entrenador_t* entrenador){
     return lista_insertar(gimnasio->entrenadores,entrenador);
 }
 
+
 bool gimnasio_pokemon_tomado(gimnasio_t* gimnasio){
     if(!gimnasio ){
         return true;
@@ -147,6 +148,7 @@ bool gimnasio_pokemon_tomado(gimnasio_t* gimnasio){
     
     return gimnasio->pokemon_tomado;
 }
+
 
 int gimnasio_tomar_pokemon(gimnasio_t* gimnasio){
     if(!gimnasio || gimnasio->pokemon_tomado){
@@ -156,12 +158,29 @@ int gimnasio_tomar_pokemon(gimnasio_t* gimnasio){
     return EXITO;
 }
 
+/*
+ * Recive un gimnasio y dos pokemon
+ * Se llama a la funcion de batalla del gimnasio
+ * 
+ * Si el ganador es el primer pokemon, se devolvera 1
+ * Si el ganador es el segundo pokemon, se devolvera -1
+ * 
+ * En caso de error se devuelve 1
+*/
+int gimnasio_batalla(gimnasio_t* gimnasio,pokemon_t* pkm_1,pokemon_t* pkm_2){
+    if(!gimnasio){
+        return GANO_PRIMERO;
+    }
+    return gimnasio->funcion_batalla(pkm_1,pkm_2);
+}
+
 entrenador_t* gimnasio_entrenador_a_pelear(gimnasio_t* gimnasio){
     if(!gimnasio){
         return NULL;
     }
     return lista_ultimo(gimnasio->entrenadores);
 }
+
 
 char gimnasio_tipo_entrenador(gimnasio_t* gimnasio){
     entrenador_t* entrenador = gimnasio_entrenador_a_pelear(gimnasio);
@@ -171,12 +190,14 @@ char gimnasio_tipo_entrenador(gimnasio_t* gimnasio){
     return entrenador->tipo;
 }
 
+
 size_t gimnasio_entrenadores_restantes(gimnasio_t* gimnasio){
     if(!gimnasio){
         return 0;
     }
     return lista_elementos(gimnasio->entrenadores);
 }
+
 
 int gimnasio_sacar_ultimo_entrenador(gimnasio_t* gimnasio){
     if(!gimnasio){

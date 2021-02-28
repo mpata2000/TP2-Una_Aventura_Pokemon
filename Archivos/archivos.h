@@ -5,7 +5,7 @@
 #include "../Estructura/gimnasio.h"
 #include "../Estructura/personaje.h"
 #include "../TDAs/heap.h"
-#include "../utiles.h"
+#include "../Utiles/utiles.h"
 
 #define MAX_RUTA_ARCHIVO 150
 

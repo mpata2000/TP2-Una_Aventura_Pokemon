@@ -5,6 +5,10 @@
 #define EXITO 0
 #define ERROR -1
 
+/*
+ * Reserva la memoria necesaria del personaje y le asigna el nombre recivido
+ * Si hay un error devuelve NULL
+*/
 personaje_t* personaje_crear(char nombre[MAX_NOMBRE]){
     personaje_t* personaje = calloc(1,sizeof(personaje_t));
     if(!personaje){
@@ -22,6 +26,10 @@ personaje_t* personaje_crear(char nombre[MAX_NOMBRE]){
     return personaje;
 }
 
+/*
+ * Chequea si un Pokemon recibido esta en la party
+ * Devuelve true si esta
+*/
 bool pokemon_esta_en_party(pokemon_t* party[MAX_POKEMON_PARTY],pokemon_t* pokemon){
     bool esta = false;
     int i = 0;
@@ -35,6 +43,13 @@ bool pokemon_esta_en_party(pokemon_t* party[MAX_POKEMON_PARTY],pokemon_t* pokemo
     return esta;
 }
 
+/*
+ * Recibe un personaje valido y dos numeros
+ *    -> num_pkm_party es la posicion del pokemon que se quiere sacar(Tiene que ser meno a 6)
+ *    -> num_pkm_obteni es la posicion del pokemon que se quiere poner en la party
+ * Cambia los Pokemon solo si el Pokemon no esta ya en la party
+ * Devuevle 0 en caso de que el cambio e exitoso o -1 en caso de ERROR
+*/
 int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t num_pkm_obtenido){
     if(!personaje || num_pkm_party >= MAX_POKEMON_PARTY || personaje_cantidad_pokemon(personaje) < MAX_POKEMON_PARTY){
         return ERROR;
@@ -52,6 +67,9 @@ int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t
     return EXITO;
 }
 
+/*
+ * Muestra la party del personaje por pantalla
+*/
 void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
     printf("#############################################################################################################\n");
     printf("#                                                                                                           #\n");
@@ -114,7 +132,9 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
 
 
 
-
+/*
+ * Muestra un personaje valido y todo sus Pokemon
+*/
 void personaje_mostrar(personaje_t* personaje){
     if(!personaje){
         return;
@@ -137,6 +157,10 @@ void personaje_mostrar(personaje_t* personaje){
 }
 
 
+/*
+ * Recibe un personaje_t valido
+ * Devuelve la cantidad de pokemones que tiene.
+*/
 size_t personaje_cantidad_pokemon(personaje_t* personaje){
     if(!personaje){
         return 0;
@@ -145,6 +169,10 @@ size_t personaje_cantidad_pokemon(personaje_t* personaje){
 }
 
 
+/*
+ * Recibe un personaje valido y la posicion del pokemon en la party
+ * Devuelve el Pokemon en esa posicion de la party o en caso de error NULL
+*/
 pokemon_t* personaje_pokemon_party(personaje_t* personaje,size_t pos){
     if(!personaje || pos >= MAX_POKEMON_PARTY){
         return NULL;
@@ -152,7 +180,12 @@ pokemon_t* personaje_pokemon_party(personaje_t* personaje,size_t pos){
     return personaje->party[pos];
 }
 
-
+/* REWORK */
+/*
+ * Recibe un personaje y un pokemon validos
+ * Agrega el pokemon al personaje
+ * Si tuvo exito devuelve 0 de lo contrario devuelve -1
+*/
 int personaje_agregar_pokemon(personaje_t* personaje,pokemon_t* pokemon){
     if(!personaje || !pokemon){
         return ERROR;
@@ -160,10 +193,13 @@ int personaje_agregar_pokemon(personaje_t* personaje,pokemon_t* pokemon){
     if(personaje_cantidad_pokemon(personaje) < MAX_POKEMON_PARTY){
         personaje->party[personaje_cantidad_pokemon(personaje)] = pokemon;
     }
-    return lista_insertar(personaje->pokemon_obtenidos,pokemon);
+    return lista_insertar(personaje->pokemon_obtenidos,pokemon); // SI me devuelve ERROR y la ultima posicion del vector no se sobrescribe va a perder memoria
 }
 
 
+/*
+ * Libera la memoria reservada por el personaje
+*/
 void personaje_destruir(personaje_t* personaje){
     if(!personaje){
         return;

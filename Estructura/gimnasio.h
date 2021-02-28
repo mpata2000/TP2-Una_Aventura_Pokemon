@@ -44,12 +44,30 @@ typedef struct gimnasio{
 */
 entrenador_t* entrenador_crear(char tipo,char nombre[MAX_NOMBRE]);
 
+
+/*
+ * Recibe un entrenador y un Pokemon validos
+ * Agrega el pokemon al entrnador meintras que tenga menos de 6 Pokemon
+ * Si tuvo exito devuelve 0 de lo contrario devuelve -1
+*/
 int entrenador_agregar_pokemon(entrenador_t* entrenador,pokemon_t* pokemon);
 
+/*
+ * Recibe un entrenador valido
+ * Devuelve la cantidad de pokemones que tiene.
+*/
 size_t entrenador_cantidad_pokemon(entrenador_t* entrenador);
 
+
+/*
+ * Imprime por pantalla el entrenador recivido con sus Pokemon
+*/
 void entrenador_mostrar_pokemon(entrenador_t* entrenador);
 
+/*
+ * Recibe un personaje valido y la posicion del pokemon en la party
+ * Devuelve el Pokemon en esa posicion de la party o en caso de error NULL
+*/
 pokemon_t* entrenador_pokemon(entrenador_t* entrenador,size_t pos);
 
 /*
@@ -69,6 +87,7 @@ void entrenador_destruir(void* entrenador);
 */
 gimnasio_t* gimnasio_crear(char nombre[MAX_NOMBRE],int dificultad,int id_funcion_batalla);
 
+
 /*
  * Comparador de elementos. Recibe dos elementos y devuelve:
  *    - 0 en caso de ser iguales, 
@@ -82,7 +101,11 @@ int gimnasio_comparar_dificultades(void* gym_1,void* gym_2);
 */
 void gimnasio_mostrar(gimnasio_t* gimnasio);
 
-
+/*
+ * Recibe un gimnasio y un entrenador validos
+ * Agrega el entrenador al Gimnasio
+ * Si tuvo exito devuelve 0 de lo contrario devuelve -1
+*/
 int gimnasio_insertar_entrenador(gimnasio_t* gimnasio,entrenador_t* entrenador);
 
 /*
@@ -97,6 +120,17 @@ bool gimnasio_pokemon_tomado(gimnasio_t* gimnasio);
  * Devuelve 0 si ocurrio con exito o -1 en caso de error
 */
 int gimnasio_tomar_pokemon(gimnasio_t* gimnasio);
+
+/*
+ * Recive un gimnasio y dos pokemon
+ * Se llama a la funcion de batalla del gimnasio
+ * 
+ * Si el ganador es el primer pokemon, se devolvera 1
+ * Si el ganador es el segundo pokemon, se devolvera -1
+ * 
+ * En caso de error se devuelve 1
+*/
+int gimnasio_batalla(gimnasio_t* gimnasio,pokemon_t* pkm_1,pokemon_t* pkm_2);
 
 /*
  * Recibe un gimnasio valido

@@ -1,10 +1,10 @@
 #ifndef __AVENTURA_POKEMON_H__
 #define __AVENTURA_POKEMON_H__
 
-#include "Estructura/gimnasio.h"
-#include "Estructura/personaje.h"
-#include "Archivos/archivos.h"
-#include "TDAs/heap.h"
+#include "gimnasio.h"
+#include "personaje.h"
+#include "../Archivos/archivos.h"
+#include "../TDAs/heap.h"
 
 
 
@@ -13,6 +13,7 @@ typedef struct juego{
     gimnasio_t* gimnasio_actual;
     personaje_t* personaje;
     bool simular;
+    int gimnasios_derrotados;
 }juego_t;
 
 
