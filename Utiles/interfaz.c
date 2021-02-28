@@ -1,8 +1,50 @@
 #include "interfaz.h"
-#include "./Estructura/gimnasio.h"
-#include "./Estructura/personaje.h"
-#include "./TDAs/heap.h"
+#include "../Estructura/gimnasio.h"
+#include "../Estructura/personaje.h"
+#include "../TDAs/heap.h"
 
+
+/***
+ *           d8888                            888                                  8888888b.          888                                               
+ *          d88888                            888                                  888   Y88b         888                                               
+ *         d88P888                            888                                  888    888         888                                               
+ *        d88P 888 888  888  .d88b.  88888b.  888888 888  888 888d888 8888b.       888   d88P .d88b.  888  888  .d88b.  88888b.d88b.   .d88b.  88888b.  
+ *       d88P  888 888  888 d8P  Y8b 888 "88b 888    888  888 888P"      "88b      8888888P" d88""88b 888 .88P d8P  Y8b 888 "888 "88b d88""88b 888 "88b 
+ *      d88P   888 Y88  88P 88888888 888  888 888    888  888 888    .d888888      888       888  888 888888K  88888888 888  888  888 888  888 888  888 
+ *     d8888888888  Y8bd8P  Y8b.     888  888 Y88b.  Y88b 888 888    888  888      888       Y88..88P 888 "88b Y8b.     888  888  888 Y88..88P 888  888 
+ *    d88P     888   Y88P    "Y8888  888  888  "Y888  "Y88888 888    "Y888888      888        "Y88P"  888  888  "Y8888  888  888  888  "Y88P"  888  888 
+ *                                                                                                                                                      
+ *                                                                                                                                                      
+ *                                                                                                                                                      
+ */
+
+/***
+ *                                                                                                                                       
+ *                                                                                                                                       
+ *    PPPPPPPPPPPPPPPPP                   kkkkkkkk                                                                                       
+ *    P::::::::::::::::P                  k::::::k                                                                                       
+ *    P::::::PPPPPP:::::P                 k::::::k                                                                                       
+ *    PP:::::P     P:::::P                k::::::k                                                                                       
+ *      P::::P     P:::::P  ooooooooooo    k:::::k    kkkkkkk eeeeeeeeeeee       mmmmmmm    mmmmmmm      ooooooooooo   nnnn  nnnnnnnn    
+ *      P::::P     P:::::Poo:::::::::::oo  k:::::k   k:::::kee::::::::::::ee   mm:::::::m  m:::::::mm  oo:::::::::::oo n:::nn::::::::nn  
+ *      P::::PPPPPP:::::Po:::::::::::::::o k:::::k  k:::::ke::::::eeeee:::::eem::::::::::mm::::::::::mo:::::::::::::::on::::::::::::::nn 
+ *      P:::::::::::::PP o:::::ooooo:::::o k:::::k k:::::ke::::::e     e:::::em::::::::::::::::::::::mo:::::ooooo:::::onn:::::::::::::::n
+ *      P::::PPPPPPPPP   o::::o     o::::o k::::::k:::::k e:::::::eeeee::::::em:::::mmm::::::mmm:::::mo::::o     o::::o  n:::::nnnn:::::n
+ *      P::::P           o::::o     o::::o k:::::::::::k  e:::::::::::::::::e m::::m   m::::m   m::::mo::::o     o::::o  n::::n    n::::n
+ *      P::::P           o::::o     o::::o k:::::::::::k  e::::::eeeeeeeeeee  m::::m   m::::m   m::::mo::::o     o::::o  n::::n    n::::n
+ *      P::::P           o::::o     o::::o k::::::k:::::k e:::::::e           m::::m   m::::m   m::::mo::::o     o::::o  n::::n    n::::n
+ *    PP::::::PP         o:::::ooooo:::::ok::::::k k:::::ke::::::::e          m::::m   m::::m   m::::mo:::::ooooo:::::o  n::::n    n::::n
+ *    P::::::::P         o:::::::::::::::ok::::::k  k:::::ke::::::::eeeeeeee  m::::m   m::::m   m::::mo:::::::::::::::o  n::::n    n::::n
+ *    P::::::::P          oo:::::::::::oo k::::::k   k:::::kee:::::::::::::e  m::::m   m::::m   m::::m oo:::::::::::oo   n::::n    n::::n
+ *    PPPPPPPPPP            ooooooooooo   kkkkkkkk    kkkkkkk eeeeeeeeeeeeee  mmmmmm   mmmmmm   mmmmmm   ooooooooooo     nnnnnn    nnnnnn
+ *                                                                                                                                       
+ *                                                                                                                                       
+ *                                                                                                                                       
+ *                                                                                                                                       
+ *                                                                                                                                       
+ *                                                                                                                                       
+ *                                                                                                                                       
+ */
 
 void menu_inicio_header(){
     printf("###############################################################################################\n");
@@ -42,7 +84,7 @@ void mostrar_menu_inicio(juego_t* juego){
     printf("#                                                                                             #\n");
     printf("#   ");
     if(juego->personaje){
-        printf("- 'E' para Ingresar Entrenador Principal");
+        printf("- 'E' para Ingresar Entrenador Principal"); // Cambio de color
     }else{
         printf("- 'E' para Ingresar Entrenador Principal");
     }

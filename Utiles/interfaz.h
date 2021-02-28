@@ -3,12 +3,14 @@
 
 #include <stdio.h>
 #include "../Estructura/aventura_pokemon.h"
+#include "../Utiles/ANSI-color-codes.h"
 
 
 void mostrar_menu_inicio(juego_t* juego);
 
 
 void info_cargar_personaje();
+
 
 void mostrar_error_carga_personaje();
 
