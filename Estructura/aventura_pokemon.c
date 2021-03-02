@@ -53,7 +53,7 @@ int agregar_gimnasio(juego_t* juego){
 
     mostrar_menu_inicio(juego);
     info_cargar_gimnasio();
-    printf(GRN" » Ingrese el nombre del archivo: "reset);
+    printf(" » Ingrese el nombre del archivo: "reset);
 
     if(leer_linea(stdin,nombre_archivo,MAX_NOMBRE,NULL) == NULL){
         return ERROR;
@@ -87,7 +87,7 @@ int agregar_personaje(juego_t* juego){
 
     mostrar_menu_inicio(juego);
     info_cargar_personaje();
-    printf(GRN" » Ingrese el nombre del archivo: "reset);
+    printf(" » Ingrese el nombre del archivo: "reset);
 
     if(leer_linea(stdin,nombre_archivo,MAX_NOMBRE,NULL) == NULL){
         return ERROR;

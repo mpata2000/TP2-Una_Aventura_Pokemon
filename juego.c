@@ -25,8 +25,7 @@
  * Se le informa por pantalla al usuario que caracteres se esperaban
  * Para el juego hasta que aprete enter
 */
-void error_caracter_menu(char recivido,const char* esperdo){
-    printf(" Se recivio un caracter no esperado: %c\n",recivido);
+void error_caracter_menu(const char* esperdo){
     printf(" Se esperaban alguno de los siguientes caraceres: %s\n",esperdo);
     enter_para_continuar();
 }
@@ -37,6 +36,11 @@ void error_juego_valido(char* ingreso){
     *ingreso = '\0';
 }
 
+/*
+ * menu de Incio recive un juego reservado en memoria
+ * Carga un personaje y gimnasios al juego
+ * Devuelve -1 en caso de error , 0 de lo contrario
+*/
 int menu_inicio(juego_t* juego){
     if(!juego){
         return ERROR;
@@ -93,7 +97,7 @@ int menu_inicio(juego_t* juego){
                 }
                 break;
             default:
-                error_caracter_menu(ingreso,CHAR_MENU_INICIO);
+                error_caracter_menu(CHAR_MENU_INICIO);
                 break;
         }
     }while(retorno != ERROR && ((ingreso != COMENZAR_PARTIDA && ingreso != SIMULAR_PARTIDA) || !juego_valido(juego)));
@@ -103,7 +107,8 @@ int menu_inicio(juego_t* juego){
 
 
 /*
- * 
+ * Pelea contra el gimnasio
+ * Devuelve true si el personaje fue derrotado por el gimnasio
 */
 bool menu_gimnasio(juego_t* juego){
     char ingreso = '\0';
@@ -143,7 +148,7 @@ bool menu_gimnasio(juego_t* juego){
                 }
                 break;
             default:
-                error_caracter_menu(ingreso,CHAR_MENU_GYM);
+                error_caracter_menu(CHAR_MENU_GYM);
                 break;
         }
     }
@@ -184,7 +189,7 @@ void menu_victoria(juego_t* juego){
                 juego->gimnasio_actual = heap_extraer_raiz(juego->gimnasios);
                 break;
             default:
-                error_caracter_menu(ingreso,CHAR_MENU_VIC);
+                error_caracter_menu(CHAR_MENU_VIC);
                 break;
         }
     } while (ingreso != NEXT);
@@ -213,14 +218,14 @@ bool menu_derrota(juego_t* juego){
                 cambiar_pokemon(juego);
                 break;
             case FIN_PARTIDA:
-                gimnasio_destruir(juego->gimnasio_actual);
+                //gimnasio_destruir(juego->gimnasio_actual);
                 //Terminar Juego
                 break; 
             case REINTENTAR:
                 retorno = false;
                 break;
             default:
-                error_caracter_menu(ingreso,CHAR_MENU_DERR);
+                error_caracter_menu(CHAR_MENU_DERR);
                 break;
         }
     } while (ingreso != REINTENTAR && ingreso != FIN_PARTIDA); 
@@ -300,9 +305,8 @@ int main(void){
             pantalla_maestro_pokemon(juego);
         }else{
             mostrar_pantalla_derrota(juego);
-            enter_para_continuar();
         }
-        detener_tiempo(3);
+        detener_tiempo(5);
     }
     system("clear");
     destruir_juego(juego);

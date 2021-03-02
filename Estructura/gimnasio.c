@@ -51,7 +51,7 @@ void entrenador_mostrar_pokemon(entrenador_t* entrenador){
     if(!entrenador){
         return;
     }
-    
+    system("clear");
     printf("####################################\n");
     printf("#                                  #\n");
     printf("#       %-22s    #\n",entrenador->nombre);
@@ -151,7 +151,7 @@ void gimnasio_mostrar(gimnasio_t* gimnasio){
         }
         while (lista_iterador_tiene_siguiente(iterador_pkm)){
             pokemon_t* pkm = lista_iterador_elemento_actual(iterador_pkm);
-            printf("            · "BYEL"%s"reset"\n",pkm->nombre);
+            printf("            · "BCYN"%s"reset"\n",pkm->nombre);
             printf("                - Ataque:     [%i]\n",pokemon_ataque(pkm));
             printf("                - Defensa:    [%i]\n",pokemon_defensa(pkm));
             printf("                - Velocidad:  [%i]\n",pokemon_velocidad(pkm));

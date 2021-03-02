@@ -83,7 +83,6 @@ void pokemon_mostrar(lista_t* pokemon){
     while (lista_iterador_tiene_siguiente(iterdor)){
         pokemon_t* pkm = (pokemon_t*)lista_iterador_elemento_actual(iterdor);
         if(pkm){
-            printf("# Poscision #     Nombre    #  Ataque  #  Defensa  #  Velocidad  #  EVs  # Shiny #\n");
             printf("#  %7i  # %13s #  %6i  #  %7i  #  %9i  #  %3i  #  %3s  #\n",i,pkm->nombre,pkm->ataque,pkm->defensa,pkm->velocidad,pkm->evs,pkm->shiny?"Yes":"No");
         }
         lista_iterador_avanzar(iterdor);

@@ -44,6 +44,23 @@ bool pokemon_esta_en_party(pokemon_t* party[MAX_POKEMON_PARTY],pokemon_t* pokemo
 }
 
 /*
+ * Devuelve la posicion del Pokemon en la party
+ * 
+*/
+int pos_en_party(pokemon_t* party[MAX_POKEMON_PARTY],pokemon_t* pokemon){
+    int pos = ERROR;
+    int i = 0;
+
+    while(pos == -1 && i<MAX_POKEMON_PARTY){
+        if(party[i] == pokemon){
+            pos = i;
+        }
+        i++;
+    }
+    return pos;
+}
+
+/*
  * Recibe un personaje valido y dos numeros
  *    -> num_pkm_party es la posicion del pokemon que se quiere sacar(Tiene que ser meno a 6)
  *    -> num_pkm_obteni es la posicion del pokemon que se quiere poner en la party
@@ -61,9 +78,14 @@ int personaje_cambiar_pokemon(personaje_t* personaje,size_t num_pkm_party,size_t
     }
 
     if(pokemon_esta_en_party(personaje->party,pokemon_aux)){  
-        return ERROR;     
+        int i = pos_en_party(personaje->party,pokemon_aux);
+        if(i == ERROR){
+            return ERROR;
+        }
+        personaje->party[i] = personaje->party[num_pkm_party];
     }
     personaje->party[num_pkm_party] = pokemon_aux;
+    
     return EXITO;
 }
 

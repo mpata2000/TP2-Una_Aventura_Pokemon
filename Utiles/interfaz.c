@@ -19,8 +19,9 @@ void pantalla_de_carga(const char* mensaje){
 	for(i=0; i<101; i++){
 		carga[i]= '.';
 	}
+
 	for(i=0; i<101; i++){
-        if((i%20) == 0){
+        if((i%21) == 0){
             pokemon_num = rand()%POKEMON_ASCII;
         }
         printf(GRN" » %s "reset"\n",mensaje);
@@ -56,15 +57,15 @@ void mostrar_carga_juego(){
 		carga[i]= '.';
 	}
 	for(i=0; i<101; i++){
-		printf( BLU "                                                          d8888                            888                              "reset"\n");
-        printf( BLU "                                                         d88888                            888                              "reset"\n");
-        printf( BLU "                                                        d88P888                            888                              "reset"\n");
-        printf( BLU "                                                       d88P 888 888  888  .d88b.  88888b.  888888 888  888 888d888 8888b.   "reset"\n");
+		printf( BLU "                                                          d8888                            888                                 "reset"\n");
+        printf( BLU "                                                         d88888                            888                                 "reset"\n");
+        printf( BLU "                                                        d88P888                            888                                 "reset"\n");
+        printf( BLU "                                                       d88P 888 888  888  .d88b.  88888b.  888888 888  888 888d888 8888b.      "reset"\n");
         printf( BLU "                                                      d88P  888 888  888 d8P  Y8b 888 \"88b 888    888  888 888P\"      \"88b  "reset"\n");
-        printf( BLU "                                                     d88P   888 Y88  88P 88888888 888  888 888    888  888 888    .d888888  "reset"\n");
-        printf( BLU "                                                    d8888888888  Y8bd8P  Y8b.     888  888 Y88b.  Y88b 888 888    888  888  "reset"\n");
-        printf( BLU "                                                   d88P     888   Y88P    \"Y8888  888  888  \"Y888  \"Y88888 888    \"Y888888  "reset"\n");
-        printf( BLU "                                                                                                                            "reset"\n");
+        printf( BLU "                                                     d88P   888 Y88  88P 88888888 888  888 888    888  888 888    .d888888     "reset"\n");
+        printf( BLU "                                                    d8888888888  Y8bd8P  Y8b.     888  888 Y88b.  Y88b 888 888    888  888     "reset"\n");
+        printf( BLU "                                                   d88P     888   Y88P    \"Y8888  888  888  \"Y888  \"Y88888 888    \"Y888888 "reset"\n");
+        printf( BLU "                                                                                                                               "reset"\n");
         printf( BLU "                                                                                  `  .znzi`                                                               "reset"\n");
         printf( BLU "                                                                                 ` `.#nzzz:`                                                              "reset"\n");
         printf( BLU "                                                                                   .#nzz#z#.                                                              "reset"\n");
@@ -144,8 +145,6 @@ void mostrar_carga_juego(){
  *      '   `-' `-' ' ' `-^   `--' ' ' ' `-' ' `-' 
  *                                                                                       
  */
-
-
 void menu_inicio_header(){
     printf("################################################################################################\n");
     printf("#                                                                                              #\n");
@@ -340,7 +339,7 @@ void mostrar_batalla(juego_t* juego,pokemon_t* pkm_jugador,pokemon_t* pkm_entren
         strcat(ganador_txt," de ");
         strcat(ganador_txt,juego->personaje->nombre);
     }else{
-        pkm_ganador = pkm_jugador;
+        pkm_ganador = pkm_entrenador;
         strcpy(ganador_txt,pokemon_nombre(pkm_ganador));
         strcat(ganador_txt," de ");
         strcat(ganador_txt,entrenador->nombre);
@@ -352,7 +351,7 @@ void mostrar_batalla(juego_t* juego,pokemon_t* pkm_jugador,pokemon_t* pkm_entren
     printf("  │   ┌────────────────────────────────────────────────────────────────.   │⠀  \n");
     printf("  │   │                                                                │   │   \n");
     printf("  │   │       ┌──────────────────────────────────────────────────┐     │   │   \n");
-    printf("  │   │       │ »"BGRN" %-20s"reset"                     │     │   │   \n",juego->gimnasio_actual->nombre); //NOMBRE DEL GIMNASIO
+    printf("  │   │       │ »"BGRN" %-46s"reset" │     │   │   \n",juego->gimnasio_actual->nombre); // Aveces se rompe no se porque
     printf("  │   │  "BRED"O"reset" »» │ » Batalla Pokemon                                │     │   │   \n");
     printf("  │   │ POWER │                                                  │     │   │   \n");
     printf("  │   │       │ » "BMAG"%-20s"reset"                           │     │   │   \n",juego->personaje->nombre); //PERSONAJE
@@ -491,9 +490,9 @@ void mostrar_menu_derrota(juego_t* juego){
  * C: Permite cambiar los Pokémon de batalla.
  * N: Próximo gimnasio.
  *       - Si no hay próximo gimnasio, se deberá notificar al usuario que se convirtió en Maestro Pokémon.
+ * 
+ * TODO: mejorar dibujo
 */
-
-
 void mostrar_menu_victoria(juego_t* juego){
     system("clear");
     printf("################################################################################################\n");
@@ -505,20 +504,20 @@ void mostrar_menu_victoria(juego_t* juego){
     printf("#                                                                                              #\n");
     printf("################################################################################################\n");
     printf("#                                                                                              #\n");
-    printf("#                         ⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣠⣤⣶⣶                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⢰⣿⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⣀⣀⣾⣿⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⡏⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠉⠁⠀⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠙⠿⠿⠿⠻⠿⠿⠟⠿⠛⠉⠀⠀⠀⠀⠀⣸⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣴⣿⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢰⣹⡆⠀⠀⠀⠀⠀⠀⣭⣷⠀⠀⠀⠸⣿⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠈⠉⠀⠀⠤⠄⠀⠀⠀⠉⠁⠀⠀⠀⠀⢿⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⢾⣿⣷⠀⠀⠀⠀⡠⠤⢄⠀⠀⠀⠠⣿⣿⣷⠀⢸⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⡀⠉⠀⠀⠀⠀⠀⢄⠀⢀⠀⠀⠀⠀⠉⠉⠁⠀⠀⣿⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿                                  #\n");
-    printf("#                         ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿                                  #\n");
+    printf("#                          ⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣠⣤⣶⣶                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⢰⣿⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⣀⣀⣾⣿⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⡏⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⠀⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠉⠁⠀⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠙⠿⠿⠿⠻⠿⠿⠟⠿⠛⠉⠀⠀⠀⠀⠀⣸⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣴⣿⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢰⣹⡆⠀⠀⠀⠀⠀⠀⣭⣷⠀⠀⠀⠸⣿⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠈⠉⠀⠀⠤⠄⠀⠀⠀⠉⠁⠀⠀⠀⠀⢿⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⢾⣿⣷⠀⠀⠀⠀⡠⠤⢄⠀⠀⠀⠠⣿⣿⣷⠀⢸⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⡀⠉⠀⠀⠀⠀⠀⢄⠀⢀⠀⠀⠀⠀⠉⠉⠁⠀⠀⣿⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿                                  #\n");
+    printf("#                          ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿                                  #\n");
     printf("#                                                                                              #\n");
     printf("################################################################################################\n");
     printf("#                                                                                              #\n");
@@ -537,7 +536,8 @@ void mostrar_menu_victoria(juego_t* juego){
 
 void pantalla_maestro_pokemon(juego_t* juego){
     system("clear");
-
+    printf("\n");
+    printf("\n");
     printf("   ooo        ooooo                                  .                           ooooooooo.             oooo                                                          \n");
     printf("   `88.       .888'                                .o8                           `888   `Y88.           `888                                                          \n");
     printf("    888b     d'888   .oooo.    .ooooo.   .oooo.o .o888oo oooo d8b  .ooooo.        888   .d88'  .ooooo.   888  oooo   .ooooo.  ooo. .oo.  .oo.    .ooooo.  ooo. .oo.   \n");
@@ -711,5 +711,5 @@ void mostrar_pantalla_derrota(juego_t* juego){
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣤⣤⣤⣿⣿⡟⣿⡇⠀⠀⠀⠀⠀⠀⠀⠘⠿⠛⠛⠿⠃⠀⠀⠀⠀⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠿⠏⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀\n");
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⠉⠉⠉⠉⣿⣷⣻⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⠟⠀⠀⠀\n");
     printf("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢾⡿⠿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n");
-    printf("\n")
+    printf("\n");
 }

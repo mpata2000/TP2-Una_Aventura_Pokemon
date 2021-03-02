@@ -27,9 +27,18 @@ typedef struct heap{
     size_t tope;
 }heap_t;
 
-
+/*
+ * Crea la lista reservando la memoria necesaria. 
+ * Recive el destructor de elementos si es necesario y un comparador
+ * Devuelve un puntero a la lista creada o NULL en caso de error.
+ */
 heap_t* heap_crear(heap_comparador comparador,heap_destructor destructor);
 
+/*
+ * Recive un heap valido que pueda destruir el elemento
+ * Se inserta un elemento en el heap en la posicion correcta
+ * Devuelve 0 en caso de exito o -1 en caso de error
+*/
 int heap_insertar(heap_t* heap,void* elemento);
 
 /*
@@ -37,8 +46,15 @@ int heap_insertar(heap_t* heap,void* elemento);
 */
 size_t heap_elementos(heap_t* heap);
 
+/*
+ * Se saca del heap la raiz y se devuelve su el elemento 
+*/
 void* heap_extraer_raiz(heap_t* heap);
 
+
+/*
+ * Libera la memoria almacenada por el heap
+*/
 void heap_destruir(heap_t* heap);
 
 
