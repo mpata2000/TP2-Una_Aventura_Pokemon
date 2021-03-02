@@ -1,5 +1,7 @@
 #include "./Estructura/aventura_pokemon.h"
 #include "./Utiles/interfaz.h"
+#include "./Utiles/ascii_pokemon.h"
+#include <time.h>
 
 #define AGREGAR_PERSONAJE 'E'
 #define MOSTRAR_PERSONAJE 'E'
@@ -17,10 +19,22 @@
 #define CHAR_MENU_VIC "T, C, N"
 #define CHAR_MENU_DERR "C, R, F"
 
+
+/*
+ * Recive una letra ingresada y lo que se esperaba
+ * Se le informa por pantalla al usuario que caracteres se esperaban
+ * Para el juego hasta que aprete enter
+*/
 void error_caracter_menu(char recivido,const char* esperdo){
-    printf("Se recivio un caracter no esperado: %c\n",recivido);
-    printf("Se esperaban alguno de los siguientes caraceres: %s\n",esperdo);
+    printf(" Se recivio un caracter no esperado: %c\n",recivido);
+    printf(" Se esperaban alguno de los siguientes caraceres: %s\n",esperdo);
     enter_para_continuar();
+}
+
+void error_juego_valido(char* ingreso){
+    printf(" El juego no puede ser iniciado sin tener al menos un gimnasio y un personaje\n");
+    enter_para_continuar();
+    *ingreso = '\0';
 }
 
 int menu_inicio(juego_t* juego){
@@ -33,23 +47,18 @@ int menu_inicio(juego_t* juego){
     do{
         mostrar_menu_inicio(juego);
 
-        ingreso = leer_caracter("Ingrese una letra: ");
+        ingreso = leer_caracter(" Ingrese una letra: ");
         // Si ocurre un error ingreso va a ser '/0' no deberia ser un problema
-
-        if((ingreso == COMENZAR_PARTIDA || ingreso == SIMULAR_PARTIDA) && !juego_valido(juego)){
-            printf(" El juego no puede ser iniciado sin tener al menos un gimnasio y un personaje\n");
-            enter_para_continuar();
-        }
 
 
         switch (ingreso){
             case AGREGAR_GYM:
                 if(agregar_gimnasio(juego) == ERROR){
-                    if(leer_caracter("Ingrese N para continuar o cualquier otro caracter para terminar el juego: ") != NEXT){
+                    if(leer_caracter(" Ingrese N para continuar o cualquier otro caracter para terminar el juego: ") != NEXT){
                         retorno = ERROR;
                     }
                 }else{
-                    printf("Se cargo el archivo con Exito\n");
+                    printf(BGRN" » Se cargo el archivo con Exito!"reset"\n");
                     enter_para_continuar();
                 }
                 break;
@@ -61,28 +70,34 @@ int menu_inicio(juego_t* juego){
                             retorno = ERROR;
                         }
                     }else{
-                        printf("Se cargo el archivo con Exito\n");
+                        printf(BGRN" » Se cargo el archivo con Exito!"reset"\n");
                         enter_para_continuar();
                     }
 
                 }else{
-                    printf("Ya se cargo un personaje\n");
+                    printf("  Ya se cargo un personaje\n");
                     enter_para_continuar();
                 }
                 break; 
 
             case SIMULAR_PARTIDA:
-                juego->simular = true;
+                if(juego_valido(juego)){
+                    juego->simular = true;
+                }else{
+                    error_juego_valido(&ingreso);
+                }
                 break;
-
+            case COMENZAR_PARTIDA:
+                if(!juego_valido(juego)){
+                    error_juego_valido(&ingreso); 
+                }
+                break;
             default:
                 error_caracter_menu(ingreso,CHAR_MENU_INICIO);
                 break;
         }
     }while(retorno != ERROR && ((ingreso != COMENZAR_PARTIDA && ingreso != SIMULAR_PARTIDA) || !juego_valido(juego)));
-
-    
-    
+  
     return retorno;
 }
 
@@ -102,7 +117,7 @@ bool menu_gimnasio(juego_t* juego){
 
     while(gimnasio_entrenadores_restantes(juego->gimnasio_actual) > 0 && !jugador_derrotado && !gimnasio_derrotado){
         mostrar_menu_gimnasio(juego);
-        ingreso = leer_caracter(" Ingrese una letra: ");
+        ingreso = leer_caracter("  Ingrese una letra: ");
         
         switch (ingreso){
             case CAMBIAR_POKEMON:
@@ -150,14 +165,19 @@ void menu_victoria(juego_t* juego){
 
     do{
         mostrar_menu_victoria(juego);
-        ingreso = leer_caracter("Ingrese una letra: ");
+        ingreso = leer_caracter(" Ingrese una letra: ");
         
         switch (ingreso){
             case CAMBIAR_POKEMON:
                 cambiar_pokemon(juego);
                 break;
             case TOMAR_POKEMON:
-                tomar_pokemon(juego);
+                if (!gimnasio_pokemon_tomado(juego->gimnasio_actual)){
+                    tomar_pokemon(juego);
+                }else{
+                    printf("  Ya se a tomado un Pokemon del Lider\n");
+                    enter_para_continuar();
+                }
                 break; 
             case NEXT:
                 gimnasio_destruir(juego->gimnasio_actual);
@@ -186,7 +206,7 @@ bool menu_derrota(juego_t* juego){
 
     do{
         mostrar_menu_derrota(juego);
-        ingreso = leer_caracter("Ingrese una letra: ");
+        ingreso = leer_caracter(" Ingrese una letra: ");
         
         switch (ingreso){
             case CAMBIAR_POKEMON:
@@ -208,7 +228,10 @@ bool menu_derrota(juego_t* juego){
     return retorno;
 }
 
-
+/*
+ * Juega un partida entera
+ * Devuelve true si el jugador fue derrotado
+*/
 bool jugar(juego_t* juego){
     bool derrota = false;
 
@@ -223,16 +246,23 @@ bool jugar(juego_t* juego){
             menu_victoria(juego);
         }
         juego->gimnasios_derrotados++;
-        juego->gimnasio_actual = heap_extraer_raiz(juego->gimnasios);
     }
 
     return derrota;
 }
 
+/*
+ * Simula una partida entera
+ * Devuelve true si el jugador fue derrotado
+*/
 bool simular(juego_t* juego){
     bool derrota = false;
+    
 
     do{
+        if(juego->gimnasio_actual){
+            gimnasio_destruir(juego->gimnasio_actual);
+        }
         juego->gimnasio_actual = heap_extraer_raiz(juego->gimnasios);
 
         //Si el gimnasio_actual es NULL lo saltea
@@ -246,16 +276,18 @@ bool simular(juego_t* juego){
         juego->gimnasios_derrotados++;
     }while(juego->gimnasio_actual && !derrota);
 
-    //TODO: Pantalla de carga falsa
+    pantalla_de_carga("Simulando...");
 
     return derrota;
 }
 
 int main(void){
+    srand((unsigned int)time(0));
     bool derrota;
     juego_t* juego = crear_juego();
 
-    //TODO: Pantalla de carga falsa
+    mostrar_carga_juego();
+
 
     if(menu_inicio(juego) == EXITO){
         if(juego->simular){
@@ -267,10 +299,12 @@ int main(void){
         if(!derrota && !juego->gimnasio_actual){
             pantalla_maestro_pokemon(juego);
         }else{
-            //Mensaje de derrota
+            mostrar_pantalla_derrota(juego);
+            enter_para_continuar();
         }
+        detener_tiempo(3);
     }
-
+    system("clear");
     destruir_juego(juego);
-
+    return 0;
 }

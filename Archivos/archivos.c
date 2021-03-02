@@ -20,9 +20,9 @@
  * Recive la linea leida, el numero de esa linea y el formato que se esperaba
 */
 void mensaje_error_formato(char linea[BUFFER],int num_linea,char formato_esperado[BUFFER]){
-    printf(" ERROR: \n");
-    printf(" En la linea %i se leyo:\n %s\n",num_linea,linea);
-    printf(" Se esperaba algo del formato: %s\n",formato_esperado);
+    printf("  ERROR: \n");
+    printf("  En la linea %i se leyo:\n %s\n",num_linea,linea);
+    printf("  Se esperaba algo del formato: %s\n",formato_esperado);
 }
 
 
@@ -113,18 +113,26 @@ entrenador_t* leer_entrenador(FILE* archivo,char linea[BUFFER],int* num_linea,bo
 
     entrenador_t* entrenador = entrenador_crear(tipo,nombre);
 
-    while (leer_linea(archivo,linea,BUFFER,num_linea) && linea[0] == POKEMON && (lista_elementos(entrenador->pokemon) < MAX_POKEMON_ENTRENADOR) && !(*error_lectura)){
-        pokemon_t* pokemon = leer_pokemon(linea,num_linea,error_lectura);
-        if(entrenador_agregar_pokemon(entrenador,pokemon) == ERROR){
-            entrenador_destruir(entrenador);
-            return NULL;
+    while (leer_linea(archivo,linea,BUFFER,num_linea) && linea[0] == POKEMON && !(*error_lectura)){
+        if(lista_elementos(entrenador->pokemon) < MAX_POKEMON_ENTRENADOR){
+            pokemon_t* pokemon = leer_pokemon(linea,num_linea,error_lectura);
+            if(entrenador_agregar_pokemon(entrenador,pokemon) == ERROR){
+                pokemon_destruir(pokemon);
+                entrenador_destruir(entrenador);
+                return NULL;
+            }
+        }else{
+            mensaje_error_formato(linea,*num_linea,ERROR_FORMATO_ENTRENADOR);
+            printf("  Los entrenadores no pueden tener mas de 6 Pokemon\n");
+            (*error_lectura) = true;
         }
     }
 
     if(entrenador_cantidad_pokemon(entrenador) == 0){
-        printf("Todos los entrenadores tienen que tener al menos un pokemon\n");
+        printf("  Todos los entrenadores tienen que tener al menos un pokemon\n");
         (*error_lectura) = true;
     }
+
 
     if(*error_lectura){
         entrenador_destruir(entrenador);
@@ -179,16 +187,19 @@ gimnasio_t* leer_gimnasio(FILE* archivo,char linea[BUFFER],int* num_linea,bool* 
 
     entrenador_t* lider = leer_entrenador(archivo,linea,num_linea,error_lectura);
     if(gimnasio_insertar_entrenador(gym,lider) == ERROR){
+        gimnasio_destruir(gym);
         return NULL;
     }
     
     while (estado_archivo && linea[0] == ENTRENADOR && !(*error_lectura)){
         entrenador_t* entrenador = leer_entrenador(archivo,linea,num_linea,error_lectura);
-        if(gimnasio_insertar_entrenador(gym,entrenador) == ERROR){
+        if(gimnasio_insertar_entrenador(gym,entrenador) == ERROR || *error_lectura){
+            entrenador_destruir(entrenador);
             gimnasio_destruir(gym);
             return NULL;
         }
-    }    
+    }
+
     return gym;
 }
 
@@ -218,7 +229,6 @@ int lectura_archivo_gimnasios(const char* ruta_archivo,heap_t* heap){
     if(!linea_gimnasio || linea_gimnasio[0] != GIMNASIO){
         error_lectura = true;
         mensaje_error_formato(linea,num_linea,ERROR_FORMATO_GYM);
-        printf("Todos los gimnasios deben tener primero un lider\n");
     }
 
     while (linea[0] == GIMNASIO && !error_lectura && linea_gimnasio){
@@ -278,6 +288,7 @@ personaje_t* lectura_archivo_personaje(const char* ruta_archivo){
         i++;
     }
 
+    fclose(archivo);
     if(personaje_cantidad_pokemon(personaje) == 0){
         return NULL;
     }

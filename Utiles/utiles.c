@@ -15,7 +15,7 @@ void detener_tiempo(float seg){
 }
 
 void enter_para_continuar(){
-    printf("Presione ENTER para continuar...\n");
+    printf("  Presione ENTER para continuar...\n");
     fflush(stdout);
     fflush(stdin);
     getchar();
@@ -69,7 +69,7 @@ char leer_caracter(const char* mensaje){
 /*
  * Imprime el mensaje recivido por pantalla
  * Lee el numero ingresado por el usuario y lo devuelve positivo
- * Si ocurre un error devuelve -1
+ * Si ocurre un error devuelve 0
 */
 int obtener_numero(const char* mensaje){
     char ingreso[6];
@@ -81,8 +81,6 @@ int obtener_numero(const char* mensaje){
     }
 
     pos = atoi(ingreso);
-    if(pos == 0){
-        return ERROR;
-    }
+    
     return abs(pos);
 }

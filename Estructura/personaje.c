@@ -134,6 +134,7 @@ void mostrar_party(pokemon_t* party[MAX_POKEMON_PARTY]){
 
 /*
  * Muestra un personaje valido y todo sus Pokemon
+ * Es medio feo
 */
 void personaje_mostrar(personaje_t* personaje){
     if(!personaje){
@@ -151,8 +152,8 @@ void personaje_mostrar(personaje_t* personaje){
 
     mostrar_party(personaje->party);
     printf("\n");
-    printf("##########################################################################\n");
-    printf("#                           POKEMON OBTENIDOS                            #\n");
+    printf("##################################################################################\n");
+    printf("#                               POKEMON OBTENIDOS                                #\n");
     pokemon_mostrar(personaje->pokemon_obtenidos);
 }
 
@@ -208,5 +209,6 @@ void personaje_destruir(personaje_t* personaje){
     if (personaje->pokemon_obtenidos){
         lista_destruir(personaje->pokemon_obtenidos);
     }
+    
     free(personaje);
 }

@@ -32,11 +32,13 @@ void destruir_juego(juego_t* juego){
         return;
     }
 
-    heap_destruir(juego->gimnasios);
-    if(!juego->gimnasio_actual){
+    personaje_destruir(juego->personaje);
+    if(juego->gimnasio_actual){
         gimnasio_destruir(juego->gimnasio_actual);
     }
-    personaje_destruir(juego->personaje);
+    heap_destruir(juego->gimnasios);
+
+
     free(juego);
 }
 
@@ -51,7 +53,7 @@ int agregar_gimnasio(juego_t* juego){
 
     mostrar_menu_inicio(juego);
     info_cargar_gimnasio();
-    printf(" Ingrese el nombre del archivo: ");
+    printf(GRN" » Ingrese el nombre del archivo: "reset);
 
     if(leer_linea(stdin,nombre_archivo,MAX_NOMBRE,NULL) == NULL){
         return ERROR;
@@ -59,17 +61,15 @@ int agregar_gimnasio(juego_t* juego){
 
     strcat(ruta_archivo,nombre_archivo);
 
-    //TODO: Pantalla de carga falsa
+    pantalla_de_carga("Se esta cargando el archivo...");
+    mostrar_menu_inicio(juego);
+    info_cargar_gimnasio();
 
     if(lectura_archivo_gimnasios(ruta_archivo,juego->gimnasios) == ERROR){
         if(heap_elementos(juego->gimnasios)){
-            printf("Ocurrio un error");
-            printf("Se leyeron correctamente %li gimnasios\n",heap_elementos(juego->gimnasios));
-            if(leer_caracter("Si desea continuar presione N sino cualquier otro caracter\n") == NEXT){
-                return EXITO;
-            };
+            printf("  Ocurrio un error");
+            printf("  Se leyeron correctamente %li gimnasios\n",heap_elementos(juego->gimnasios));
         }
-        enter_para_continuar();
         return ERROR;
     }
     
@@ -87,19 +87,24 @@ int agregar_personaje(juego_t* juego){
 
     mostrar_menu_inicio(juego);
     info_cargar_personaje();
-    printf(" Ingrese el nombre del archivo: ");
+    printf(GRN" » Ingrese el nombre del archivo: "reset);
 
     if(leer_linea(stdin,nombre_archivo,MAX_NOMBRE,NULL) == NULL){
         return ERROR;
     }
 
+    if(strcmp(nombre_archivo,"Praise the Sun")==0){
+        easter_egg();
+    }
     strcat(ruta_archivo,nombre_archivo);
 
-    //TODO: Pantalla de carga falsa
+    pantalla_de_carga("Se esta cargando el archivo...");
+    mostrar_menu_inicio(juego);
+    info_cargar_personaje();
 
     juego->personaje = lectura_archivo_personaje(ruta_archivo);
     if(!juego->personaje){
-        printf("Ocurrio un error en la carga del archivo\n");
+        printf("  Ocurrio un error en la carga del archivo\n");
         return ERROR;
     }
     return EXITO;
@@ -123,18 +128,15 @@ bool batalla(juego_t* juego){
     }
     size_t contador_personaje = 0;
     size_t contador_entrenador = 0;
-    pokemon_t* pkm_jugador = NULL;
-    pokemon_t* pkm_entrenador = NULL;
+    
+    pokemon_t* pkm_jugador = personaje_pokemon_party(juego->personaje,contador_personaje);
+    pokemon_t* pkm_entrenador = entrenador_pokemon(entrenador_actual,contador_entrenador);
 
-    do{
-        pkm_jugador = personaje_pokemon_party(juego->personaje,contador_personaje);
-        pkm_entrenador = entrenador_pokemon(entrenador_actual,contador_entrenador);
-        if(!juego->simular){
-            mostrar_batalla(juego,pkm_jugador,pkm_entrenador);
-        }
-        /*Talvez abstraer funcion?*/
-        if(gimnasio_batalla(juego->gimnasio_actual,pkm_jugador,pkm_entrenador) == GANO_PRIMERO){ // El que pierde tiene que pasar de Pokemon
-            /* TODO: Mostrar quien gano?*/
+    while (pkm_jugador && pkm_entrenador){  // El primero que se quede sin pokemon pierde
+
+        int ganador = gimnasio_batalla(juego->gimnasio_actual,pkm_jugador,pkm_entrenador);
+
+        if( ganador == GANO_PRIMERO){ // El que pierde tiene que pasar de Pokemon
             contador_entrenador++;
             pokemon_aumentrar_evs(pkm_jugador);
         }else{
@@ -142,10 +144,14 @@ bool batalla(juego_t* juego){
         }
 
         if (!juego->simular){
-            while(leer_caracter("Ingrese N para continuar: ") != NEXT);
+            do{
+                mostrar_batalla(juego,pkm_jugador,pkm_entrenador,ganador);
+            }while(leer_caracter("  Ingrese N para continuar: ") != NEXT);
         }
-        
-    }while (pkm_jugador && pkm_entrenador); // El primero que se quede sin pokemon pierde
+
+        pkm_jugador = personaje_pokemon_party(juego->personaje,contador_personaje);
+        pkm_entrenador = entrenador_pokemon(entrenador_actual,contador_entrenador);
+    }
     
     if(pkm_jugador){
         return true;
@@ -174,17 +180,17 @@ void tomar_pokemon(juego_t* juego){
     entrenador_mostrar_pokemon(lider);
     
     do{
-        pos_pkm = obtener_numero(" Ingrese el numero del Pokemon que quiere tomar: ");
+        pos_pkm = obtener_numero("  Ingrese el numero del Pokemon que quiere tomar: ");
         pokemon_lider = entrenador_pokemon(lider,(size_t)abs(pos_pkm));
         if(!pokemon_lider){
-            printf(" No se pudo obtener ese Pokemon.\n");
+            printf("  No se pudo obtener ese Pokemon.\n");
             enter_para_continuar();
         }
     } while (!pokemon_lider);
     
     pokemon_t* pkm_copia = pokemon_recrear(pokemon_lider);
     if(!pkm_copia){
-        printf(" No se pudo tomar ese Pokemon.\n");
+        printf("  No se pudo tomar ese Pokemon.\n");
         enter_para_continuar();
     }else{
         personaje_agregar_pokemon(juego->personaje,pkm_copia);
@@ -204,7 +210,7 @@ void cambiar_pokemon(juego_t* juego){
     }
 
     if(personaje_cantidad_pokemon(juego->personaje) < MAX_POKEMON_PARTY){
-        printf(" Necesita tener mas de 6 Pokemon para cambiar la party.\n");
+        printf("  Necesita tener mas de 6 Pokemon para cambiar la party.\n");
         enter_para_continuar();
         return;
     }
@@ -214,28 +220,28 @@ void cambiar_pokemon(juego_t* juego){
     personaje_mostrar(juego->personaje);
     
     do{
-        if (pos_pkm_1 >= MAX_POKEMON_PARTY || pos_pkm_1 == ERROR){
-            printf("El numero ingresado no es valido\n");
-            printf("Recuerde de solo ingresar numeros y que el numero pertenesca a la party\n");
+        if (pos_pkm_1 >= MAX_POKEMON_PARTY || pos_pkm_1 < 0){
+            printf("  El numero ingresado no es valido\n");
+            printf("  Recuerde de solo ingresar numeros y que el numero pertenesca a la party\n");
         }
         
-        pos_pkm_1 = obtener_numero("Ingresar la posicion del Pokemon de la Party: ");
-    }while(pos_pkm_1 >= MAX_POKEMON_PARTY || pos_pkm_1 == ERROR);
+        pos_pkm_1 = obtener_numero("  Ingresar la posicion del Pokemon de la Party: ");
+    }while(pos_pkm_1 >= MAX_POKEMON_PARTY || pos_pkm_1 < 0);
 
     do{
-        if (pos_pkm_2 == ERROR){
-            printf("El numero ingresado no es valido\n");
-            printf("Recuerde de solo ingresar numeros\n");
+        if (pos_pkm_2 < 0){
+            printf("  El numero ingresado no es valido\n");
+            printf("  Recuerde de solo ingresar numeros\n");
         }
         
-        pos_pkm_2 = obtener_numero("Ingresar la posicion del Pokemon Obtenido: ");
-    }while(pos_pkm_2 == ERROR);
+        pos_pkm_2 = obtener_numero("  Ingresar la posicion del Pokemon Obtenido: ");
+    }while(pos_pkm_2 < 0);
 
     if(personaje_cambiar_pokemon(juego->personaje,(size_t)pos_pkm_1,(size_t)pos_pkm_2) == EXITO){
-        printf("Los Pokemon han sido cambiado con exito.\n");
+        printf("  Los Pokemon han sido cambiado con exito.\n");
     }else{
-        printf("Ocurrio un error al cambiar los Pokemon\n");
-        printf("Esto pudo ocrrir porque la posicion no existia o el Pokemon ya estaba en la party\n");
+        printf("  Ocurrio un error al cambiar los Pokemon\n");
+        printf("  Esto pudo ocrrir porque la posicion no existia o el Pokemon ya estaba en la party\n");
     }
     enter_para_continuar();
 }

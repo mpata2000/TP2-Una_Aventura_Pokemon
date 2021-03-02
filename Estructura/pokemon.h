@@ -14,6 +14,7 @@ typedef struct pokemon{
     int defensa;
     int velocidad;
     int evs;
+    bool shiny;
 }pokemon_t;
 
 

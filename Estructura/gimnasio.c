@@ -1,6 +1,7 @@
 
 #include "gimnasio.h"
 #include <stdio.h>
+#include "../Utiles/ANSI-color-codes.h"
 
 #define EXITO 0
 #define ERROR -1
@@ -45,6 +46,7 @@ size_t entrenador_cantidad_pokemon(entrenador_t* entrenador){
     return lista_elementos(entrenador->pokemon);
 }
 
+
 void entrenador_mostrar_pokemon(entrenador_t* entrenador){
     if(!entrenador){
         return;
@@ -52,7 +54,7 @@ void entrenador_mostrar_pokemon(entrenador_t* entrenador){
     
     printf("####################################\n");
     printf("#                                  #\n");
-    printf("#       %22s       #\n",entrenador->nombre);
+    printf("#       %-22s    #\n",entrenador->nombre);
     printf("#                                  #\n");
     printf("####################################\n");
     printf("\n");
@@ -118,6 +120,11 @@ gimnasio_t* gimnasio_crear(char nombre[MAX_NOMBRE],int dificultad,int id_funcion
 }
 
 int gimnasio_comparar_dificultades(void* gym_1,void* gym_2){
+    if(!gym_1){
+        return -1;
+    }else if(!gym_2){
+        return 1;
+    }
     return ((gimnasio_t*)gym_1)->dificultad - ((gimnasio_t*)gym_2)->dificultad;
 }
 
@@ -127,7 +134,35 @@ void gimnasio_mostrar(gimnasio_t* gimnasio){
         return;
     }
     system("clear");
-    printf("%s\n",gimnasio->nombre);
+    printf("\n");
+    lista_iterador_t* iterador_entrenador = lista_iterador_crear(gimnasio->entrenadores);
+
+    printf("» "BGRN"%s"reset"\n",gimnasio->nombre);
+    printf("    » Dificultad: %i\n",gimnasio->dificultad);
+    printf("    » Entrenadores restantes: %li\n",lista_elementos(gimnasio->entrenadores));
+    printf("    » Entrenadores:\n");
+    while (lista_iterador_tiene_siguiente(iterador_entrenador)){
+        entrenador_t* entrenador = lista_iterador_elemento_actual(iterador_entrenador);
+        lista_iterador_t* iterador_pkm = lista_iterador_crear(entrenador->pokemon);
+        if(entrenador->tipo == LIDER){
+             printf("        » "BYEL"%s"reset"\n",entrenador->nombre);
+        }else{
+            printf("        » "BMAG"%s"reset"\n",entrenador->nombre);
+        }
+        while (lista_iterador_tiene_siguiente(iterador_pkm)){
+            pokemon_t* pkm = lista_iterador_elemento_actual(iterador_pkm);
+            printf("            · "BYEL"%s"reset"\n",pkm->nombre);
+            printf("                - Ataque:     [%i]\n",pokemon_ataque(pkm));
+            printf("                - Defensa:    [%i]\n",pokemon_defensa(pkm));
+            printf("                - Velocidad:  [%i]\n",pokemon_velocidad(pkm));
+
+            lista_iterador_avanzar(iterador_pkm);
+        }
+        lista_iterador_destruir(iterador_pkm);
+        lista_iterador_avanzar(iterador_entrenador);
+    }
+    
+    lista_iterador_destruir(iterador_entrenador);
     
 }
 
@@ -197,6 +232,7 @@ size_t gimnasio_entrenadores_restantes(gimnasio_t* gimnasio){
     }
     return lista_elementos(gimnasio->entrenadores);
 }
+
 
 
 int gimnasio_sacar_ultimo_entrenador(gimnasio_t* gimnasio){

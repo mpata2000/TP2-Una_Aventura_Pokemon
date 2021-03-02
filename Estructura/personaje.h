@@ -45,6 +45,8 @@ int personaje_agregar_pokemon(personaje_t* personaje,pokemon_t* pokemon);
 */
 size_t personaje_cantidad_pokemon(personaje_t* personaje);
 
+
+
 /*
  * Recibe un personaje valido y la posicion del pokemon en la party
  * Devuelve el Pokemon en esa posicion de la party o en caso de error NULL

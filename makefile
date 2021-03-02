@@ -3,7 +3,7 @@ CFILES = find . -name '*.c'
 HFILES = find . -name '*.h'
 MAIN = juego.c
 OBJETOS = ./Estructura/gimnasio.o ./Estructura/personaje.o ./Estructura/pokemon.o ./Estructura/batallas.o ./Estructura/aventura_pokemon.o \
-          ./TDAs/lista.o ./TDAs/heap.o ./Archivos/archivos.o ./Utiles/utiles.o ./Utiles/interfaz.o 
+          ./TDAs/lista.o ./TDAs/heap.o ./Archivos/archivos.o ./Utiles/utiles.o ./Utiles/interfaz.o ./Utiles/ascii_pokemon.o
 FILES = Enunciado makefile Archivos Estructura TDAs
 EXEC = aventura_pokemon
 CFLAGS =  -g -std=c99 -Wall -Wconversion -Wtype-limits -pedantic -Werror -O0

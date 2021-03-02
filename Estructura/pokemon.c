@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
+
 pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int velocidad,int ataque,int defensa){
     pokemon_t* poke = calloc(1,sizeof(pokemon_t));
     if(!poke){
@@ -12,6 +13,7 @@ pokemon_t* pokemon_crear(char nombre[MAX_NOMBRE],int velocidad,int ataque,int de
     poke->velocidad = velocidad;
     poke->ataque = ataque;
     poke->defensa = defensa;
+    poke->shiny = (rand()%8192 == 0);//chance de un shiny
 
     return poke;
 }
@@ -22,6 +24,7 @@ pokemon_t* pokemon_recrear(pokemon_t* pokemon){
     }
     pokemon_t* pkm = pokemon_crear(pokemon->nombre,pokemon->velocidad,pokemon->ataque,pokemon->defensa);
     pkm->evs = pokemon->evs;
+    pkm->shiny = pokemon->shiny;
     
     return pkm;
 }
@@ -73,19 +76,20 @@ void pokemon_mostrar(lista_t* pokemon){
         return;
     }
 
-    printf("##########################################################################\n");
-    printf("# Poscision #     Nombre    #  Ataque  #  Defensa  #  Velocidad  #  EVs  #\n");
+    printf("##################################################################################\n");
+    printf("# Poscision #     Nombre    #  Ataque  #  Defensa  #  Velocidad  #  EVs  # Shiny #\n");
 
     int i = 0;
     while (lista_iterador_tiene_siguiente(iterdor)){
         pokemon_t* pkm = (pokemon_t*)lista_iterador_elemento_actual(iterdor);
         if(pkm){
-            printf("#  %7i  # %13s #  %6i  #  %7i  #  %9i  #  %3i  #\n",i,pkm->nombre,pkm->ataque,pkm->defensa,pkm->velocidad,pkm->evs);
+            printf("# Poscision #     Nombre    #  Ataque  #  Defensa  #  Velocidad  #  EVs  # Shiny #\n");
+            printf("#  %7i  # %13s #  %6i  #  %7i  #  %9i  #  %3i  #  %3s  #\n",i,pkm->nombre,pkm->ataque,pkm->defensa,pkm->velocidad,pkm->evs,pkm->shiny?"Yes":"No");
         }
         lista_iterador_avanzar(iterdor);
         i++;
     }
-    printf("##########################################################################\n");
+    printf("##################################################################################\n");
     lista_iterador_destruir(iterdor);
 }
 

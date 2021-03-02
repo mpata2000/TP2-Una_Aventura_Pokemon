@@ -86,9 +86,12 @@ int lista_insertar_en_posicion(lista_t* lista, void* elemento, size_t posicion){
  * Borra el nodo y actualiza el nodo anterior:
  * Devuelve la nueva cantidad de elementos de la lista.
  */
-size_t borrar_nodo(nodo_t* nodo_anterior,size_t cantidad){
+size_t borrar_nodo(nodo_t* nodo_anterior,size_t cantidad,nodo_destructor destructor){
 	nodo_t* nodo_posicion = nodo_anterior->siguiente;
-	nodo_anterior->siguiente = nodo_posicion->siguiente;	
+	nodo_anterior->siguiente = nodo_posicion->siguiente;
+	if(destructor){
+		destructor(nodo_posicion->elemento);
+	}	
 	free(nodo_posicion);
 
 	return (cantidad-1);
@@ -102,6 +105,9 @@ int lista_borrar(lista_t* lista){
 	if(lista_vacia(lista)) return ERROR;
 	
 	if(lista->cantidad == 1){
+		if(lista->destructor){
+			lista->destructor(lista->nodo_fin->elemento);
+		}
 		free(lista->nodo_fin);
 		lista->nodo_inicio = lista->nodo_fin = NULL;
 		lista->cantidad--;
@@ -110,7 +116,7 @@ int lista_borrar(lista_t* lista){
 
 	nodo_t* nodo_aux = buscar_nodo(lista->nodo_inicio,lista->cantidad-2);
 	lista->nodo_fin = nodo_aux;
-	lista->cantidad = borrar_nodo(nodo_aux,lista->cantidad);
+	lista->cantidad = borrar_nodo(nodo_aux,lista->cantidad,lista->destructor);
 
 	return EXITO;
 }
@@ -133,7 +139,7 @@ int lista_borrar_de_posicion(lista_t* lista, size_t posicion){
 	}
 
 	nodo_t* nodo_anterior = buscar_nodo(lista->nodo_inicio,posicion-1);
-	lista->cantidad = borrar_nodo(nodo_anterior,lista->cantidad);
+	lista->cantidad = borrar_nodo(nodo_anterior,lista->cantidad,lista->destructor);
 
 	return EXITO;
 }
@@ -215,6 +221,9 @@ int lista_desapilar(lista_t* lista){
 
 	nodo_t* nodo_aux = lista->nodo_inicio;
 	lista->nodo_inicio = nodo_aux->siguiente;
+	if(lista->destructor){
+		lista->destructor(nodo_aux->elemento);
+	}
 	free(nodo_aux);
 	lista->cantidad--;
 	return EXITO;
@@ -248,6 +257,9 @@ int lista_desencolar(lista_t* lista){
 	}
 	nodo_t* nodo_aux = lista->nodo_inicio;
 	lista->nodo_inicio = nodo_aux->siguiente;
+	if(lista->destructor){
+		lista->destructor(nodo_aux->elemento);
+	}
 	free(nodo_aux);
 	lista->cantidad--;
 	return EXITO;

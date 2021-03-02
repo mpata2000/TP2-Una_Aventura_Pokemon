@@ -59,6 +59,7 @@ int entrenador_agregar_pokemon(entrenador_t* entrenador,pokemon_t* pokemon);
 size_t entrenador_cantidad_pokemon(entrenador_t* entrenador);
 
 
+
 /*
  * Imprime por pantalla el entrenador recivido con sus Pokemon
 */
@@ -145,6 +146,7 @@ entrenador_t* gimnasio_entrenador_a_pelear(gimnasio_t* gimnasio);
  * En caso de error devuelve '\0'
 */
 char gimnasio_tipo_entrenador(gimnasio_t* gimnasio);
+
 
 /*
  * Recibe un gimnasio valido
