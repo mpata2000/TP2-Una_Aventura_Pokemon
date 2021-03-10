@@ -218,7 +218,7 @@ bool menu_derrota(juego_t* juego){
                 cambiar_pokemon(juego);
                 break;
             case FIN_PARTIDA:
-                //gimnasio_destruir(juego->gimnasio_actual);  Hace doble free...
+                //gimnasio_destruir(juego->gimnasio_actual);  Esto causaba doble free
                 //Terminar Juego
                 break; 
             case REINTENTAR:

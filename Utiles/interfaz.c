@@ -351,7 +351,7 @@ void mostrar_batalla(juego_t* juego,pokemon_t* pkm_jugador,pokemon_t* pkm_entren
     printf("  │   ┌────────────────────────────────────────────────────────────────.   │⠀  \n");
     printf("  │   │                                                                │   │   \n");
     printf("  │   │       ┌──────────────────────────────────────────────────┐     │   │   \n");
-    printf("  │   │       │ »"BGRN" %-46s"reset" │     │   │   \n",juego->gimnasio_actual->nombre); // Aveces se rompe no se porque
+    printf("  │   │       │ »"BGRN" %-46s"reset" │     │   │   \n",juego->gimnasio_actual->nombre); // Aveces se rompe no se porque.
     printf("  │   │  "BRED"O"reset" »» │ » Batalla Pokemon                                │     │   │   \n");
     printf("  │   │ POWER │                                                  │     │   │   \n");
     printf("  │   │       │ » "BMAG"%-20s"reset"                           │     │   │   \n",juego->personaje->nombre); //PERSONAJE
